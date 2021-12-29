@@ -69,8 +69,6 @@ public class PhoneTabFragment extends Fragment {
         return rootView;
     }
 
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -85,7 +83,7 @@ public class PhoneTabFragment extends Fragment {
                         Intent data = result.getData();
 
                         Uri imageUri = data.getData();
-                        // 이거 addContact 할때 써야함.. 
+                        // 이거 addContact 할때 써야함..
                     }
                 }
             });
@@ -138,8 +136,13 @@ public class PhoneTabFragment extends Fragment {
 
                 phoneTabAdapter.notifyDataSetChanged();
 
+                recyclerView.setAdapter(phoneTabAdapter);
+
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                //ft.detach(this).attach(this).commit();
+
+                Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+                //ft.replace(R.id.nav_host_fragment_activity_main, f);
+                //ft.detach(f).attach(f).commit();
             }
         });
 
