@@ -63,10 +63,11 @@ public class ImageAdapter extends BaseAdapter {
         if (null != convertView) {
             imageview = (ImageView) convertView;
         }
+        int a = parent.getWidth();
         imageview = new ImageView(context);
+        imageview.setLayoutParams(new GridView.LayoutParams(parent.getWidth()/3-7, parent.getWidth()/3-7));
         imageview.setImageResource(images[position]);
         imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageview.setLayoutParams(new GridView.LayoutParams(240, 240));
         return imageview;
     }
 }
