@@ -8,15 +8,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.renderscript.ScriptGroup;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +36,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,6 +45,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project1.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PhoneTabFragment extends Fragment {
@@ -47,6 +56,7 @@ public class PhoneTabFragment extends Fragment {
     Button addPhoneNumBtn;
     private ArrayList<ContactData> contactData;
     private Uri profileImageUri;
+    private ImageView profileImageView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -86,8 +96,7 @@ public class PhoneTabFragment extends Fragment {
                         Intent data = result.getData();
 
                         profileImageUri = data.getData();
-                        // 이거 addContact 할때 써야함.. TODO
-                        Log.d("GOOOOOD", "HANYANG" + profileImageUri.toString());
+                        profileImageView.setImageURI(profileImageUri);
                     }
                 }
             });
@@ -117,6 +126,8 @@ public class PhoneTabFragment extends Fragment {
 
         final Button imageBtn = new Button(getActivity());
         imageBtn.setText("프로필 이미지");
+        imageBtn.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        imageBtn.setSingleLine(true);
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,11 +139,17 @@ public class PhoneTabFragment extends Fragment {
             }
         });
 
-        final ImageView imageView = new ImageView(getActivity());
 
-        imageView.setMaxWidth(30);
+        profileImageView = new ImageView(getActivity());
+        profileImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        profileImageView.setAdjustViewBounds(true);
+        profileImageView.setMaxWidth(100);
+        profileImageView.setMaxHeight(100);
+
+        int resourceId = R.drawable.user;
+        profileImageView.setImageResource(resourceId);
         linearLayout1.addView(imageBtn);
-        linearLayout1.addView(imageView);
+        linearLayout1.addView(profileImageView);
 
         linearLayout.addView(nameInput);
         linearLayout.addView(numInput);
@@ -192,17 +209,31 @@ public class PhoneTabFragment extends Fragment {
             );
 
 
-            // TODO 이게 맞나??? 아닌듯
+            Bitmap bitmap = null;
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), profileImageUri));
+                } else {
+                    bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), profileImageUri);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-/*
+            /* Bitmap to Byte array */
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            bitmap.recycle();
+
             operations.add(
                     ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                             .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                             .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
-                            .withValue(ContactsContract.CommonDataKinds.Phone.PHOTO_URI, profileImageUri.toString())
+                            .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, byteArray)
                             .build()
             );
-*/
+
 
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, operations);
             operations.clear();
