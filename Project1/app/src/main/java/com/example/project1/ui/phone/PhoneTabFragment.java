@@ -123,10 +123,12 @@ public class PhoneTabFragment extends Fragment {
 
         LinearLayout linearLayout1 = new LinearLayout(getActivity());
         linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout1.setGravity(Gravity.FILL_HORIZONTAL);
+        linearLayout1.setWeightSum(3);
 
         final Button imageBtn = new Button(getActivity());
         imageBtn.setText("프로필 이미지");
-        imageBtn.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+
         imageBtn.setSingleLine(true);
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,8 +145,16 @@ public class PhoneTabFragment extends Fragment {
         profileImageView = new ImageView(getActivity());
         profileImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         profileImageView.setAdjustViewBounds(true);
-        profileImageView.setMaxWidth(100);
-        profileImageView.setMaxHeight(100);
+        profileImageView.setMaxWidth(150);
+        profileImageView.setMaxHeight(150);
+
+
+        LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp1.weight = 2;
+        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp2.weight = 1;
+        imageBtn.setLayoutParams(lp1);
+        profileImageView.setLayoutParams(lp2);
 
         int resourceId = R.drawable.user;
         profileImageView.setImageResource(resourceId);
@@ -162,6 +172,9 @@ public class PhoneTabFragment extends Fragment {
                 String name = nameInput.getText().toString();
                 String phoneNum = numInput.getText().toString();
 
+                if (name == "" || phoneNum == "") {
+
+                }
                 addContacts(context, name, phoneNum);
                 contactData = getContacts(context);
 
