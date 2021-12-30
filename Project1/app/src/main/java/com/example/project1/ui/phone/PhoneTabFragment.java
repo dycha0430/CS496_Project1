@@ -141,13 +141,11 @@ public class PhoneTabFragment extends Fragment {
             }
         });
 
-
         profileImageView = new ImageView(getActivity());
         profileImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         profileImageView.setAdjustViewBounds(true);
         profileImageView.setMaxWidth(150);
         profileImageView.setMaxHeight(150);
-
 
         LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp1.weight = 2;
