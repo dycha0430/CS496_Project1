@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project1.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHolder>{
@@ -47,7 +48,9 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             Log.d("Hello", "Dayun" + contactData.getProfileRes());
             holder.profileImage.setImageURI(Uri.parse(contactData.getProfileRes()));
         } else {
-            holder.profileImage.setImageDrawable(Drawable.createFromPath("@drawable/ic_launcher_foreground"));
+            //TODO
+            int resourceId = R.drawable.user;
+            holder.profileImage.setImageResource(resourceId);
         }
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -90,6 +93,11 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
         notifyItemRangeChanged(position, contactList.size());
 
         context.getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.CONTACT_ID + "=" + contactId, null);
+    }
+
+
+    public void setContactList(ArrayList<ContactData> contactList) {
+        this.contactList = contactList;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

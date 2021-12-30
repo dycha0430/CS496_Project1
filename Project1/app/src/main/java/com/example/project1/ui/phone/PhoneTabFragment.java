@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.activity.result.ActivityResult;
@@ -44,6 +46,7 @@ public class PhoneTabFragment extends Fragment {
     PhoneTabAdapter phoneTabAdapter;
     Button addPhoneNumBtn;
     private ArrayList<ContactData> contactData;
+    private Uri profileImageUri;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -82,8 +85,9 @@ public class PhoneTabFragment extends Fragment {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
 
-                        Uri imageUri = data.getData();
-                        // 이거 addContact 할때 써야함..
+                        profileImageUri = data.getData();
+                        // 이거 addContact 할때 써야함.. TODO
+                        Log.d("GOOOOOD", "HANYANG" + profileImageUri.toString());
                     }
                 }
             });
@@ -108,6 +112,9 @@ public class PhoneTabFragment extends Fragment {
         numInput.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
         numInput.setHint("전화번호를 입력하세요");
 
+        LinearLayout linearLayout1 = new LinearLayout(getActivity());
+        linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+
         final Button imageBtn = new Button(getActivity());
         imageBtn.setText("프로필 이미지");
         imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -116,13 +123,20 @@ public class PhoneTabFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
 
+                profileImageUri = null;
                 getImageActivityResultLauncher.launch(intent);
             }
         });
 
+        final ImageView imageView = new ImageView(getActivity());
+
+        imageView.setMaxWidth(30);
+        linearLayout1.addView(imageBtn);
+        linearLayout1.addView(imageView);
+
         linearLayout.addView(nameInput);
         linearLayout.addView(numInput);
-        linearLayout.addView(imageBtn);
+        linearLayout.addView(linearLayout1);
         alert.setView(linearLayout);
 
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -134,15 +148,8 @@ public class PhoneTabFragment extends Fragment {
                 addContacts(context, name, phoneNum);
                 contactData = getContacts(context);
 
+                phoneTabAdapter.setContactList(contactData);
                 phoneTabAdapter.notifyDataSetChanged();
-
-                recyclerView.setAdapter(phoneTabAdapter);
-
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-
-                Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-                //ft.replace(R.id.nav_host_fragment_activity_main, f);
-                //ft.detach(f).attach(f).commit();
             }
         });
 
@@ -169,10 +176,10 @@ public class PhoneTabFragment extends Fragment {
 
             operations.add(
                     ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
-                    .build()
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                            .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
+                            .build()
             );
 
             operations.add(
@@ -183,6 +190,19 @@ public class PhoneTabFragment extends Fragment {
                             .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                             .build()
             );
+
+
+            // TODO 이게 맞나??? 아닌듯
+
+/*
+            operations.add(
+                    ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.PHOTO_URI, profileImageUri.toString())
+                            .build()
+            );
+*/
 
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, operations);
             operations.clear();
@@ -196,7 +216,6 @@ public class PhoneTabFragment extends Fragment {
 
         ContentResolver resolver = context.getContentResolver();
         Uri phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-
 
         String[] projection = {
                 ContactsContract.CommonDataKinds.Phone.PHOTO_URI,
