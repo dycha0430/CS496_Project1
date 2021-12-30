@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -30,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -37,6 +39,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -113,6 +116,7 @@ public class PhoneTabFragment extends Fragment {
 
         final EditText nameInput = new EditText(getActivity());
         nameInput.setHint("이름을 입력하세요");
+        nameInput.setPadding(0, 0, 0, 50);
 
         final EditText numInput = new EditText(getActivity());
         numInput.setInputType(InputType.TYPE_CLASS_PHONE);
@@ -120,14 +124,19 @@ public class PhoneTabFragment extends Fragment {
         int maxLength = 13;
         numInput.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
         numInput.setHint("전화번호를 입력하세요");
+        numInput.setPadding(0, 0, 0, 50);
 
         LinearLayout linearLayout1 = new LinearLayout(getActivity());
         linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout1.setGravity(Gravity.FILL_HORIZONTAL);
         linearLayout1.setWeightSum(3);
+        linearLayout1.setPadding(0, 50, 0, 0);
 
         final Button imageBtn = new Button(getActivity());
         imageBtn.setText("프로필 이미지");
+        imageBtn.setTextSize(18);
+        imageBtn.setBackgroundColor(Color.CYAN);
+        imageBtn.setBackground(ContextCompat.getDrawable(context, R.drawable.radius));
 
         imageBtn.setSingleLine(true);
         imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +155,8 @@ public class PhoneTabFragment extends Fragment {
         profileImageView.setAdjustViewBounds(true);
         profileImageView.setMaxWidth(150);
         profileImageView.setMaxHeight(150);
+        profileImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.profile));
+        profileImageView.setClipToOutline(true);
 
         LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp1.weight = 2;
@@ -188,7 +199,12 @@ public class PhoneTabFragment extends Fragment {
             }
         });
 
-        alert.show();
+        AlertDialog tmpAlert = alert.show();
+
+        // alertdialog에 폰트 적용 실패
+//        TextView textView = (TextView) tmpAlert.findViewById(R.id.message);
+//        Typeface face = Typeface.createFromAsset(context.getAssets(), "font/nanumfont.ttf");
+//        textView.setTypeface(face);
     }
 
     public void addContacts(Context context, String name, String phoneNum) {

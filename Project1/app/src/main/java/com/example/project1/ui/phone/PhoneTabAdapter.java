@@ -58,7 +58,7 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             @Override
             public boolean onLongClick(View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-
+                
                 dialog.setMessage("연락처를 삭제하시겠습니까?");
                 dialog.setCancelable(true);
                 dialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
