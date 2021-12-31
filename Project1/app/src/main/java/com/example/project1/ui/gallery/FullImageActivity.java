@@ -3,6 +3,7 @@ package com.example.project1.ui.gallery;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project1.R;
+import com.github.chrisbanes.photoview.PhotoView;
 
 
 import android.content.Intent;
@@ -21,7 +22,7 @@ public class FullImageActivity extends AppCompatActivity {
         int position = i.getExtras().getInt("id");
         ImageAdapter adapter = new ImageAdapter(this);
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageResource(adapter.images[position]);
+        PhotoView photoView = (PhotoView) findViewById(R.id.photoView);
+        photoView.setImageResource(adapter.images[position]);
     }
 }
