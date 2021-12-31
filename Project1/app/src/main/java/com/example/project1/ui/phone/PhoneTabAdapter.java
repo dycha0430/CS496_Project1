@@ -23,7 +23,7 @@ import com.example.project1.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHolder>{
+public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHolder> implements ItemTouchHelperListener {
     private Context context;
     private ArrayList<ContactData> contactList;
     public PhoneTabAdapter(Context context, ArrayList<ContactData> contactList) {
@@ -55,31 +55,6 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             holder.profileImage.setImageResource(resourceId);
         }
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                
-                dialog.setMessage("연락처를 삭제하시겠습니까?");
-                dialog.setCancelable(true);
-                dialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        removeItemView(position);
-                    }
-                });
-                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-                dialog.show();
-                return false;
-            }
-        });
-
         holder.callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,10 +63,39 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             }
         });
 
+        // Long click으로 삭제
+//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+//
+//                dialog.setMessage("연락처를 삭제하시겠습니까?");
+//                dialog.setCancelable(true);
+//                dialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        removeItemView(position);
+//                    }
+//                });
+//                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                    }
+//                });
+//
+//                dialog.show();
+//                return false;
+//            }
+//        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
+                intent.putExtra("name", contactData.getName());
+                intent.putExtra("phoneNum", contactData.getPhoneNum());
+                intent.putExtra("imageUri", contactData.getProfileRes().toString());
                 context.startActivity(intent);
             }
         });
@@ -114,6 +118,11 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
 
     public void setContactList(ArrayList<ContactData> contactList) {
         this.contactList = contactList;
+    }
+
+    @Override
+    public void onItemSwipe(int position) {
+        removeItemView(position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
