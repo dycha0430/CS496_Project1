@@ -7,21 +7,21 @@
     android:layout_gravity="center">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:cardCornerRadius="1000dp"
         app:cardElevation="0dp"
         android:layout_gravity="center"
         >
         <ImageView
-            android:id="@+id/profileImageView"
+            android:id="@+id/detailProfileImageView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/user"/>
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/nameTextView"
+        android:id="@+id/detailNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32dp"
@@ -43,7 +43,7 @@
             android:text="휴대전화"
             android:paddingRight="40dp"/>
         <TextView
-            android:id="@+id/phoneNumTextView"
+            android:id="@+id/detailPhoneNumTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="24dp"
