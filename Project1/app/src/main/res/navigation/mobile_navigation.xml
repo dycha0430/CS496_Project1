@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.project1.ui.phone.PhoneTabFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_contact"
         tools:layout="@layout/fragment_phone" />
 
     <fragment
@@ -20,6 +20,6 @@
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.project1.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_game"
         tools:layout="@layout/fragment_notifications" />
 </navigation>
