@@ -135,7 +135,6 @@ public class PhoneTabFragment extends Fragment {
         final Button imageBtn = new Button(getActivity());
         imageBtn.setText("프로필 이미지");
         imageBtn.setTextSize(18);
-        imageBtn.setBackgroundColor(Color.CYAN);
         imageBtn.setBackground(ContextCompat.getDrawable(context, R.drawable.radius));
 
         imageBtn.setSingleLine(true);
