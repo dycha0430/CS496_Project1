@@ -1,4 +1,4 @@
-package com.example.project1.ui.dashboard;
+package com.example.project1.ui.gallery;
 
 import androidx.appcompat.app.AppCompatActivity;
 

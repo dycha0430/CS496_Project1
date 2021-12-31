@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project1">
         <activity
-            android:name=".ui.dashboard.FullImageActivity"
+            android:name=".ui.gallery.FullImageActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
