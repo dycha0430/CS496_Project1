@@ -3,9 +3,11 @@ package com.example.project1.ui.gallery;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project1.R;
+import com.github.chrisbanes.photoview.PhotoView;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -18,10 +20,9 @@ public class FullImageActivity extends AppCompatActivity {
 
         Intent i = getIntent();
 
-        int position = i.getExtras().getInt("id");
-        ImageAdapter adapter = new ImageAdapter(this);
+        Uri position = Uri.parse(i.getExtras().getString("id"));
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageResource(adapter.images[position]);
+        PhotoView photoView = (PhotoView) findViewById(R.id.photoView);
+        photoView.setImageURI(position);
     }
 }
