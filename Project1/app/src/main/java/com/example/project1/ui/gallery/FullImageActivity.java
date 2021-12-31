@@ -7,6 +7,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -19,10 +20,9 @@ public class FullImageActivity extends AppCompatActivity {
 
         Intent i = getIntent();
 
-        int position = i.getExtras().getInt("id");
-        ImageAdapter adapter = new ImageAdapter(this);
+        Uri position = Uri.parse(i.getExtras().getString("id"));
 
         PhotoView photoView = (PhotoView) findViewById(R.id.photoView);
-        photoView.setImageResource(adapter.images[position]);
+        photoView.setImageURI(position);
     }
 }
