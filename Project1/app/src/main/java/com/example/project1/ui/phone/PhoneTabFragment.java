@@ -2,6 +2,7 @@ package com.example.project1.ui.phone;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -32,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -43,6 +45,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +63,7 @@ public class PhoneTabFragment extends Fragment {
     private ArrayList<ContactData> contactData;
     private Uri profileImageUri;
     private ImageView profileImageView;
+    private ItemTouchHelper itemTouchHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +77,9 @@ public class PhoneTabFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         phoneTabAdapter = new PhoneTabAdapter(getActivity(), contactData);
 
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(phoneTabAdapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
         recyclerView.setAdapter(phoneTabAdapter);
 
         addPhoneNumBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +88,7 @@ public class PhoneTabFragment extends Fragment {
                 addBtnClicked(getActivity());
             }
         });
+
 
         return rootView;
     }
