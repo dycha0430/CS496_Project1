@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,7 +80,7 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             }
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + contactData.getPhoneNum()));
@@ -87,6 +88,13 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             }
         });
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -111,12 +119,14 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView profileImage;
         TextView nameTextView, numTextView;
+        ImageButton callBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
             profileImage = (ImageView)itemView.findViewById(R.id.imageView);
             nameTextView = (TextView)itemView.findViewById(R.id.nameTextView);
             numTextView = (TextView)itemView.findViewById(R.id.numTextView);
+            callBtn = (ImageButton) itemView.findViewById(R.id.callBtn);
         }
     }
 
