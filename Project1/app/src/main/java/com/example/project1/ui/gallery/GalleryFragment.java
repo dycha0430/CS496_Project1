@@ -24,6 +24,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -71,7 +73,9 @@ public class GalleryFragment extends Fragment {
                 readStr+=str+"\n";
                 JSONObject jsonobject2 = new JSONObject(str);
                 Uri imageUri = Uri.parse(jsonobject2.getString("uri"));
-                images.add(imageUri);
+                Log.d("@@@", imageUri.toString());
+                File file = new File(imageUri.toString());
+                if (file.exists()) images.add(imageUri);
             }
             br.close();
         } catch (IOException | JSONException e) {
@@ -122,6 +126,7 @@ public class GalleryFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
 
