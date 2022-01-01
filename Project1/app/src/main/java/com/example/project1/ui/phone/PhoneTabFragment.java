@@ -77,6 +77,7 @@ public class PhoneTabFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         phoneTabAdapter = new PhoneTabAdapter(getActivity(), contactData);
 
+
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(phoneTabAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
@@ -124,7 +125,10 @@ public class PhoneTabFragment extends Fragment {
 
         final EditText nameInput = new EditText(getActivity());
         nameInput.setHint("이름을 입력하세요");
+        nameInput.setHintTextColor(Color.GRAY);
+        nameInput.setTextColor(Color.BLACK);
         nameInput.setPadding(0, 0, 0, 50);
+
 
         final EditText numInput = new EditText(getActivity());
         numInput.setInputType(InputType.TYPE_CLASS_PHONE);
@@ -132,6 +136,8 @@ public class PhoneTabFragment extends Fragment {
         int maxLength = 13;
         numInput.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
         numInput.setHint("전화번호를 입력하세요");
+        numInput.setHintTextColor(Color.GRAY);
+        numInput.setTextColor(Color.BLACK);
         numInput.setPadding(0, 0, 0, 50);
 
         LinearLayout linearLayout1 = new LinearLayout(getActivity());
@@ -189,10 +195,10 @@ public class PhoneTabFragment extends Fragment {
                 String phoneNum = numInput.getText().toString();
 
                 if (name == "" || phoneNum == "") {
-
+                    return;
                 }
-                addContacts(context, name, phoneNum);
-                contactData = getContacts(context);
+                addContacts(getActivity(), name, phoneNum);
+                contactData = getContacts(getActivity());
 
                 phoneTabAdapter.setContactList(contactData);
                 phoneTabAdapter.notifyDataSetChanged();

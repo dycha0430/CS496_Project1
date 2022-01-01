@@ -3,6 +3,7 @@ package com.example.project1.ui.phone;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,10 +32,19 @@ public class ContactDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
         String phoneNum = intent.getStringExtra("phoneNum");
-        Uri imageUri = Uri.parse(intent.getStringExtra("imageUri"));
+        String imageUriString = intent.getStringExtra("imageUri");
+
+        Uri imageUri;
+        if (imageUriString == "empty") {
+            Log.d("HHHHHHH", imageUriString);
+            profileImage.setImageResource(R.drawable.user);
+        } else {
+            imageUri = Uri.parse(imageUriString);
+            profileImage.setImageURI(imageUri);
+        }
 
         nameTv.setText(name);
         phoneNumTv.setText(phoneNum);
-        profileImage.setImageURI(imageUri);
+
     }
 }

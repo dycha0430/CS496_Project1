@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.phone.ContactDetailActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="false">
 
         </activity>
