@@ -95,7 +95,12 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
                 Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
                 intent.putExtra("name", contactData.getName());
                 intent.putExtra("phoneNum", contactData.getPhoneNum());
-                intent.putExtra("imageUri", contactData.getProfileRes().toString());
+                if (contactData.getProfileRes() != null) {
+                    intent.putExtra("imageUri", contactData.getProfileRes().toString());
+                } else {
+                    intent.putExtra("imageUri", "empty");
+                }
+
                 context.startActivity(intent);
             }
         });
