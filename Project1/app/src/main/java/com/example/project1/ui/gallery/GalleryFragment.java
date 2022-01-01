@@ -2,12 +2,16 @@ package com.example.project1.ui.gallery;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +28,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -34,16 +39,18 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
 
-    private ArrayList<Uri> images;
+    private ArrayList<String> images;
 
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
@@ -55,7 +62,23 @@ public class GalleryFragment extends Fragment {
     private ImageView addImageView;
     JSONObject jsonObject;
 
-
+    //Uri -> Path(파일경로)
+    private String uri2path(Uri contentUri) {
+        if (contentUri.getPath().startsWith("/storage")) {
+            return contentUri.getPath();
+        }
+        String id = DocumentsContract.getDocumentId(contentUri).split(":")[1];
+        String[] columns = { MediaStore.Files.FileColumns.DATA };
+        String selection = MediaStore.Files.FileColumns._ID + " = " + id;
+        Cursor cursor = getActivity().getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
+        try {
+            int columnIndex = cursor.getColumnIndex(columns[0]);
+            if (cursor.moveToFirst()) { return cursor.getString(columnIndex); }
+        } finally {
+            cursor.close();
+        }
+        return null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -70,8 +93,9 @@ public class GalleryFragment extends Fragment {
                 if (!((str=br.readLine())!=null)) break;
                 readStr+=str+"\n";
                 JSONObject jsonobject2 = new JSONObject(str);
-                Uri imageUri = Uri.parse(jsonobject2.getString("uri"));
-                images.add(imageUri);
+                String imagePath = jsonobject2.getString("uri");
+                File file = new File(imagePath);
+                if (file.exists()) images.add(imagePath);
             }
             br.close();
         } catch (IOException | JSONException e) {
@@ -101,12 +125,14 @@ public class GalleryFragment extends Fragment {
                             addImageUri = data.getData();
                             addImageView = new ImageView(context);
                             addImageView.setImageURI(addImageUri);
-                            images.add(addImageUri);
+                            String x = uri2path(addImageUri);
+                            images.add(x);
+                            Log.d("upload", uri2path(addImageUri));
                             imageAdapter.setImages(images);
                             imageAdapter.notifyDataSetChanged();
                             jsonObject = new JSONObject();
                             try {
-                                jsonObject.put("uri",addImageUri);
+                                jsonObject.put("uri",x);
                                 String jsonString = jsonObject.toString() + "\n";
                                 BufferedWriter bw = new BufferedWriter(new FileWriter(context.getFilesDir() + "gallery.json", true));
                                 bw.write(jsonString);
@@ -122,6 +148,7 @@ public class GalleryFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
 
@@ -138,8 +165,6 @@ public class GalleryFragment extends Fragment {
                 startActivity(i);
             }
         });
-
-
 
         return rootView;
     }
