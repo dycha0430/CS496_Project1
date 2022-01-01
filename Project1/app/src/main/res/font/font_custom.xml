@@ -2,17 +2,17 @@
 <font-family xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <font
-        android:font="@font/nanumfont"
+        android:font="@font/nanumsquareround"
         android:fontWeight="400"
         android:fontStyle="normal"
-        app:font="@font/nanumfont"
+        app:font="@font/nanumsquareround"
         app:fontWeight="500"
         app:fontStyle="normal"/>
     <font
-        android:font="@font/nanumfont"
+        android:font="@font/nanumsquareround"
         android:fontWeight="700"
         android:fontStyle="normal"
-        app:font="@font/nanumfont"
+        app:font="@font/nanumsquareround"
         app:fontWeight="1000"
         app:fontStyle="normal"/>
 

@@ -16,6 +16,7 @@
         android:backgroundTint="#98D7F8"
         android:background="#98D7F8"
         android:text="연락처 추가하기"
+        android:textSize="18sp"
         android:fontFamily="@font/font_custom"
         app:icon="@android:drawable/ic_input_add" />
 

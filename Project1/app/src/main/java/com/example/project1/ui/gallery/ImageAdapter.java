@@ -77,7 +77,7 @@ public class ImageAdapter extends BaseAdapter {
         imageview.setLayoutParams(new GridView.LayoutParams(parent.getWidth()/3-15, parent.getWidth()/3-15));
         Bitmap myBitmap = BitmapFactory.decodeFile(images.get(position));
         imageview.setImageBitmap(myBitmap);
-        Log.d("set", images.get(position));
+        //Log.d("set", images.get(position));
         imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageview;
     }

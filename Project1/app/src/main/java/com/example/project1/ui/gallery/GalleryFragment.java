@@ -127,7 +127,7 @@ public class GalleryFragment extends Fragment {
                             addImageView.setImageURI(addImageUri);
                             String x = uri2path(addImageUri);
                             images.add(x);
-                            Log.d("upload", uri2path(addImageUri));
+                            //Log.d("upload", uri2path(addImageUri));
                             imageAdapter.setImages(images);
                             imageAdapter.notifyDataSetChanged();
                             jsonObject = new JSONObject();
