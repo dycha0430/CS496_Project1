@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -80,13 +82,15 @@ public class GalleryFragment extends Fragment {
         return null;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         images = new ArrayList<>();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader(getActivity().getFilesDir()+"gallery.json"));
+            br = new BufferedReader(new FileReader(getActivity().getFilesDir()+"gallery2.json"));
             String readStr = "";
             String str = null;
             while(true){
@@ -95,13 +99,44 @@ public class GalleryFragment extends Fragment {
                 JSONObject jsonobject2 = new JSONObject(str);
                 String imagePath = jsonobject2.getString("uri");
                 File file = new File(imagePath);
-                if (file.exists()) images.add(imagePath);
+                if (file.exists() && !images.contains(imagePath)) {
+                    images.add(imagePath);
+                }
             }
             br.close();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        images = new ArrayList<>();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(getActivity().getFilesDir()+"gallery2.json"));
+            String readStr = "";
+            String str = null;
+            while(true){
+                if (!((str=br.readLine())!=null)) break;
+                readStr+=str+"\n";
+                JSONObject jsonobject2 = new JSONObject(str);
+                String imagePath = jsonobject2.getString("uri");
+                File file = new File(imagePath);
+                if (file.exists() && !images.contains(imagePath)) {
+                    images.add(imagePath);
+                    Log.d("@222loadimage222", imagePath);
+                }
+            }
+            br.close();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        imageAdapter.images=images;
+        imageAdapter.notifyDataSetChanged();
     }
 
     @Nullable
@@ -126,15 +161,19 @@ public class GalleryFragment extends Fragment {
                             addImageView = new ImageView(context);
                             addImageView.setImageURI(addImageUri);
                             String x = uri2path(addImageUri);
-                            images.add(x);
-                            Log.d("upload", uri2path(addImageUri));
+                            if (!images.contains(x)) images.add(x);
+                            else {
+                                Toast myToast = Toast.makeText(context, "The image is already in the gallery!", Toast.LENGTH_SHORT);
+                                myToast.show();
+                                return;
+                            }
                             imageAdapter.setImages(images);
                             imageAdapter.notifyDataSetChanged();
                             jsonObject = new JSONObject();
                             try {
                                 jsonObject.put("uri",x);
                                 String jsonString = jsonObject.toString() + "\n";
-                                BufferedWriter bw = new BufferedWriter(new FileWriter(context.getFilesDir() + "gallery.json", true));
+                                BufferedWriter bw = new BufferedWriter(new FileWriter(context.getFilesDir() + "gallery2.json", true));
                                 bw.write(jsonString);
                                 bw.close();
                             } catch (IOException | JSONException e) {

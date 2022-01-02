@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.gallery.FullImageActivity">
+    android:orientation="vertical"
+    tools:context=".ui.phone.PhoneTabFragment">
 
-    <RelativeLayout
+    <Button
+        android:id="@+id/deleteImageBtn"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#98D7F8"
+        android:backgroundTint="#98D7F8"
+        android:fontFamily="@font/font_custom"
+        android:text="사진 제거하기"
+        android:textColor="#FFFFFF"
+        app:icon="@android:drawable/ic_delete" />
+
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside" />
 
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/photoView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:scaleType="centerInside" />
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
