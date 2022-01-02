@@ -37,7 +37,7 @@ public class GameFragment extends Fragment {
 
 
     /* Timer */
-    private final int TOTAL_TIME = 60;
+    private final int TOTAL_TIME = 80;
     int leftTime = TOTAL_TIME;
     private Timer timer;
     private final Handler handler;
@@ -109,6 +109,7 @@ public class GameFragment extends Fragment {
                 if (leftTime == 0) {
                     // TODO 점수 띄워주기
                     CustomDialog customDialog = new CustomDialog(getActivity(), score);
+                    customDialog.setCancelable(false);
 
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     WindowManager.LayoutParams params = customDialog.getWindow().getAttributes();
@@ -162,8 +163,12 @@ public class GameFragment extends Fragment {
     void setTimerView(int time) {
         int minute = time / 60;
         int second = time % 60;
+        String minute_display = minute + "";
+        String second_display = second + "" ;
+        if (minute < 10) minute_display = "0" + minute_display;
+        if (second < 10) second_display = "0" + second_display;
 
-        timerTextView.setText("남은 시간\n" + minute + " : "  + second);
+        timerTextView.setText("남은 시간\n" + minute_display + " : "  + second_display);
     }
 
     void setScoreView(int score) {
@@ -260,10 +265,15 @@ public class GameFragment extends Fragment {
             PeachLoc selected1 = clickedPeaches[0];
             PeachLoc selected2 = clickedPeaches[1];
 
+            int row_start = Math.min(selected1.row, selected2.row);
+            int row_end = Math.max(selected1.row, selected2.row);
+            int col_start = Math.min(selected1.col, selected2.col);
+            int col_end = Math.max(selected1.col, selected2.col);
+
             int sum = 0;
             int num = 0;
-            for (int i = Math.min(selected1.row, selected2.row); i <= Math.max(selected1.row, selected2.row); i++) {
-                for (int j = Math.min(selected1.col, selected2.col); j <= Math.max(selected1.col, selected2.col); j++) {
+            for (int i = row_start; i <= row_end; i++) {
+                for (int j = col_start; j <= col_end; j++) {
                     if (!peaches[i][j].isRemoved()) {
                         peaches[i][j].setSelected(true);
                         peaches[i][j].getPeach().setEnabled(false);
@@ -279,8 +289,8 @@ public class GameFragment extends Fragment {
                 score += num;
                 setScoreView(score);
 
-                for (int i = Math.min(selected1.row, selected2.row); i <= Math.max(selected1.row, selected2.row); i++) {
-                    for (int j = Math.min(selected1.col, selected2.col); j <= Math.max(selected1.col, selected2.col); j++) {
+                for (int i = row_start; i <= row_end; i++) {
+                    for (int j = col_start; j <= col_end; j++) {
                         peaches[i][j].getPeach().setImageResource(R.drawable.ic_baseline_circle_24);
                         peaches[i][j].setRemoved(true);
                     }
@@ -290,8 +300,8 @@ public class GameFragment extends Fragment {
             handler2.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = Math.min(selected1.row, selected2.row); i <= Math.max(selected1.row, selected2.row); i++) {
-                        for (int j = Math.min(selected1.col, selected2.col); j <= Math.max(selected1.col, selected2.col); j++) {
+                    for (int i = row_start; i <= row_end; i++) {
+                        for (int j = col_start; j <= col_end; j++) {
                             if (!peaches[i][j].isRemoved()) {
                                 peaches[i][j].getPeach().setEnabled(true);
                                 peaches[i][j].setSelected(false);
@@ -299,7 +309,7 @@ public class GameFragment extends Fragment {
                             }                        }
                     }
                 }
-            }, 200);
+            }, 300);
 
             clickedPeachNum = 0;
         }

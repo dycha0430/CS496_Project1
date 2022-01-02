@@ -3,4 +3,5 @@
     <string name="title_contact">Contact</string>
     <string name="title_gallery">Gallery</string>
     <string name="title_game">Game</string>
+    <string name="title_contact_detail">상세 연락처</string>
 </resources>

@@ -122,6 +122,7 @@ public class ImageAdapter extends BaseAdapter {
             e.printStackTrace();
         }
         imageview.setImageBitmap(newBitmap);
+
         imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageview;
     }

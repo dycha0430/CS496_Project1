@@ -1,5 +1,7 @@
 package com.example.project1.ui.phone;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -8,8 +10,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.Typeface;
@@ -19,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.renderscript.ScriptGroup;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputFilter;
@@ -49,6 +54,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project1.MainActivity;
 import com.example.project1.R;
 
 import java.io.ByteArrayOutputStream;
@@ -152,13 +158,16 @@ public class PhoneTabFragment extends Fragment {
         imageBtn.setBackground(ContextCompat.getDrawable(context, R.drawable.radius));
 
         imageBtn.setSingleLine(true);
+
+        profileImageUri = null;
+        //profileImageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/drawable/user.jpg");
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
 
-                profileImageUri = null;
+
                 getImageActivityResultLauncher.launch(intent);
             }
         });
@@ -249,22 +258,29 @@ public class PhoneTabFragment extends Fragment {
             );
 
 
+
             Bitmap bitmap = null;
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), profileImageUri));
-                } else {
-                    bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), profileImageUri);
+
+            if (profileImageUri == null) {
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.user);
+            } else {
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), profileImageUri));
+                    } else {
+                        bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), profileImageUri);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
-            /* Bitmap to Byte array */
+            // Bitmap to Byte array
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
             bitmap.recycle();
+
 
             operations.add(
                     ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
