@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -124,8 +125,12 @@ public class FullImageActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 //            PhotoView photoView = (PhotoView) findViewById(R.id.photoView);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            newBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+            byte[] byteArray = stream.toByteArray();
+            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
             PhotoView photoView = new PhotoView(this);
-            photoView.setImageBitmap(newBitmap);
+            photoView.setImageBitmap(compressedBitmap);
             list.add(photoView);
         }
         viewPager2.setAdapter(new SlideImageAdapter(images));

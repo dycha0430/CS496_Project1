@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project1.R;
 import com.github.chrisbanes.photoview.PhotoView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ViewHolderPage extends RecyclerView.ViewHolder {
@@ -68,6 +69,10 @@ public class ViewHolderPage extends RecyclerView.ViewHolder {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        photoView.setImageBitmap(newBitmap);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        newBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        byte[] byteArray = stream.toByteArray();
+        Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+        photoView.setImageBitmap(compressedBitmap);
     }
 }
