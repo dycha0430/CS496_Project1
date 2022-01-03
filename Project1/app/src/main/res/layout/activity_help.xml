@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="두 개의 복숭아를 터치하여\n 꼭점으로 하는 직사각형을 만들고,\n
+        android:text="두 개의 복숭아를 터치하여\n 꼭짓점으로 하는 직사각형을 만들고,\n
 그 안에 있는 숫자의 합이 10이 되면\n복숭아 제거 성공!
 "
         android:textAlignment="center"
