@@ -8,13 +8,13 @@
     tools:context=".ui.game.GameFragment">
 
     <TableLayout
+        android:id="@+id/gameTable"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_gravity="center"
         android:gravity="center"
-
-        android:shrinkColumns="8"
-        android:padding="15dp">
+        android:padding="5dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -1181,25 +1181,25 @@
     </TableLayout>
 
     <LinearLayout
+        android:id="@+id/gameBar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:paddingBottom="5dp"
         android:gravity="center"
         >
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/gameBtn"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:singleLine="true"
             android:text="START"
             android:background="@drawable/radius"
             android:textColor="@color/white"
-            android:textSize="15sp"/>
+            android:textSize="13sp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="30dp"
