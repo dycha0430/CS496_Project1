@@ -1,5 +1,6 @@
 package com.example.project1.ui.game;
 
+import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.project1.R;
+import com.example.project1.ui.phone.ContactDetailActivity;
 
 import java.io.File;
 import java.util.Timer;
@@ -197,7 +199,9 @@ public class GameFragment extends Fragment {
     }
 
     void helpBtnClicked() {
+        Intent intent = new Intent(getActivity(), HelpActivity.class);
 
+        startActivity(intent);
     }
 
     void initVars() {
@@ -212,6 +216,12 @@ public class GameFragment extends Fragment {
     }
 
     void init(ViewGroup rootView) {
+        helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helpBtnClicked();
+            }
+        });
         peaches = new PeachItem[12][10];
         getPeaches(rootView);
         initVars();

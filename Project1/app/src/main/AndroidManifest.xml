@@ -32,6 +32,11 @@
             android:exported="false">
 
         </activity>
+
+        <activity android:name=".ui.game.HelpActivity"
+            >
+
+        </activity>
     </application>
 
 </manifest>
