@@ -144,7 +144,7 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle saveInstanceState) {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_gallery, container, false);
-        context = container.getContext();
+        context = getActivity();
         GridView gridView = (GridView) rootView.findViewById(R.id.gridView);
         imageAdapter = new ImageAdapter(context, images);
         gridView.setAdapter(imageAdapter);

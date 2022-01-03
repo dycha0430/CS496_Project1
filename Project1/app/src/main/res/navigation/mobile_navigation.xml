@@ -3,29 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_contact">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_contact"
         android:name="com.example.project1.ui.phone.PhoneTabFragment"
         android:label="@string/title_contact"
         tools:layout="@layout/fragment_phone" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_gallery"
         android:name="com.example.project1.ui.gallery.GalleryFragment"
         android:label="@string/title_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_game"
         android:name="com.example.project1.ui.game.GameFragment"
         android:label="@string/title_game"
         tools:layout="@layout/fragment_game" />
 
-    <activity
-        android:id="@+id/navigation_contact_detail"
-        android:name="com.example.project1.ui.phone.ContactDetailActivity"
-        android:label="@string/title_contact_detail"
-        tools:layout="@layout/activity_contact_detail"/>
 </navigation>
