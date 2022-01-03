@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class GameFragment extends Fragment {
     boolean playing;
     int score;
     TableLayout gameTable;
+    ImageView readyImageView;
 
 
     /* Timer */
@@ -53,6 +55,7 @@ public class GameFragment extends Fragment {
     private Timer timer;
     private final Handler handler;
     Handler handler2 = new Handler();
+    Handler readyHandler = new Handler();
 
     /* Game board item */
     class PeachItem {
@@ -142,6 +145,7 @@ public class GameFragment extends Fragment {
         timerTextView = (TextView) rootView.findViewById(R.id.timerTextView);
         scoreTextView = (TextView) rootView.findViewById(R.id.scoreTextView);
         gameTable = (TableLayout) rootView.findViewById(R.id.gameTable);
+        readyImageView = (ImageView) rootView.findViewById(R.id.readyImageView);
         final LinearLayout gameBar = (LinearLayout) rootView.findViewById(R.id.gameBar);
 
         gameBar.post(new Runnable() {
@@ -159,7 +163,36 @@ public class GameFragment extends Fragment {
                 if (playing) {
                     resetGame();
                 } else {
-                    startGame();
+                    handler2.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            readyImageView.setImageResource(R.drawable.peach3);
+                            handler2.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    readyImageView.setImageResource(R.drawable.peach2);
+                                    handler2.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            readyImageView.setImageResource(R.drawable.peach1);
+                                            handler2.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    readyImageView.setImageResource(R.drawable.start_peach);
+                                                    handler2.postDelayed(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            startGame();
+                                                        }
+                                                    }, 500);
+                                                }
+                                            }, 1000);
+                                        }
+                                    }, 1000);
+                                }
+                            }, 1000);
+                        }
+                    }, 1000);
                 }
             }
         });
@@ -243,6 +276,9 @@ public class GameFragment extends Fragment {
             }
         }
 
+        readyImageView.setVisibility(View.INVISIBLE);
+        gameTable.setVisibility(View.VISIBLE);
+
         playing = true;
         gameBtn.setText("RESET");
         startTimer();
@@ -267,6 +303,11 @@ public class GameFragment extends Fragment {
         leftTime = TOTAL_TIME;
         setTimerView(TOTAL_TIME);
         setScoreView(0);
+
+        readyImageView.setVisibility(View.VISIBLE);
+        gameTable.setVisibility(View.INVISIBLE);
+        readyImageView.setImageResource(R.drawable.ready_peach);
+
         initGame();
     }
 
