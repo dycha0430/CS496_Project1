@@ -51,6 +51,7 @@ public class ImageAdapter extends BaseAdapter {
         }
         return null;
     }
+
     public Bitmap getRotatedBitmap(Bitmap bitmap, int degrees) throws Exception {
         if(bitmap == null) return null;
         if (degrees == 0) return bitmap;
