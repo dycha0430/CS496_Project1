@@ -1,7 +1,11 @@
 package com.example.project1.ui.phone;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -10,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +23,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,8 +43,23 @@ public class ContactDetailActivity extends AppCompatActivity {
 
     private ActivityContactDetailBinding binding;
     EditText nameTv, phoneNumTv;
+    Uri profileImageUri;
     ImageView profileImage;
-    Button editContactBtn;
+    Button editContactBtn, removeProfileBtn;
+
+    ActivityResultLauncher<Intent> getImageActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+
+                        profileImageUri = data.getData();
+                        profileImage.setImageURI(profileImageUri);
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,45 +71,65 @@ public class ContactDetailActivity extends AppCompatActivity {
         phoneNumTv = (EditText) findViewById(R.id.detailPhoneNumTextView);
         profileImage = (ImageView) findViewById(R.id.detailProfileImageView);
         editContactBtn = (Button) findViewById(R.id.editContactBtn);
+        removeProfileBtn = (Button) findViewById(R.id.removeProfileBtn);
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
         String phoneNum = intent.getStringExtra("phoneNum");
+        Long contactId = intent.getLongExtra("contactId", 0);
         String imageUriString = intent.getStringExtra("imageUri");
 
         Uri imageUri;
         if (imageUriString.equals("empty")) {
             profileImage.setImageResource(R.drawable.user);
+            profileImageUri = null;
         } else {
             imageUri = Uri.parse(imageUriString);
             profileImage.setImageURI(imageUri);
+            profileImageUri = imageUri;
         }
 
         nameTv.setText(name);
         phoneNumTv.setText(phoneNum);
+        phoneNumTv.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         editContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editContact();
-                PhoneTabFragment phoneTabFragment = new PhoneTabFragment();
-//                Intent intent = new Intent(this, phoneTabFragment.getActivity().getClass());
+                editContact(contactId);
 
                 Intent intent1 = new Intent(view.getContext(), MainActivity.class) ;
                 startActivity(intent1);
-//                getSupportFragmentManager().beginTransaction().replace(R.id.detailLinearLayout, phoneTabFragment).commit();
+            }
+        });
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+
+                getImageActivityResultLauncher.launch(intent);
+            }
+        });
+
+        removeProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileImageUri = null;
+                profileImage.setImageResource(R.drawable.user);
             }
         });
     }
 
-    void editContact() {
+    void editContact(long contactId) {
+        getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.CONTACT_ID + "=" + contactId, null);
+        addContacts(nameTv.getText().toString(), phoneNumTv.getText().toString(), profileImageUri);
+    }
+
+    void addContacts(String name, String phoneNum, Uri profileImageUri) {
         ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
-        String editName = nameTv.getText().toString();
-        String editPhoneNum = phoneNumTv.getText().toString();
-
-        long contachId = -1;
-//        contachId = getContactIdFromNameAndNumber()
         try {
             operations.add(
                     ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
@@ -95,34 +139,34 @@ public class ContactDetailActivity extends AppCompatActivity {
             );
 
             operations.add(
-                    ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                    ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                             .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                             .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                            .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, editName)
+                            .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
                             .build()
             );
 
             operations.add(
-                    ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                    ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                             .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                             .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                            .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, editPhoneNum)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNum)
                             .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                             .build()
             );
 
 
-/*
+
             Bitmap bitmap = null;
 
             if (profileImageUri == null) {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.user);
+                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.user);
             } else {
                 try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), profileImageUri));
+                        bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), profileImageUri));
                     } else {
-                        bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), profileImageUri);
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), profileImageUri);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -136,7 +180,6 @@ public class ContactDetailActivity extends AppCompatActivity {
             bitmap.recycle();
 
 
-
             operations.add(
                     ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                             .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
@@ -144,7 +187,7 @@ public class ContactDetailActivity extends AppCompatActivity {
                             .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, byteArray)
                             .build()
             );
- */
+
 
             getContentResolver().applyBatch(ContactsContract.AUTHORITY, operations);
             operations.clear();
@@ -152,4 +195,71 @@ public class ContactDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    /*
+    @SuppressLint("Range")
+    private String getRawContactId(String contactId)
+    {
+        String res = "";
+        Uri uri = ContactsContract.RawContacts.CONTENT_URI;
+        String[] projection = new String[]{ContactsContract.RawContacts._ID};
+        String selection = ContactsContract.RawContacts.CONTACT_ID + " = ?";
+        String[] selectionArgs = new String[]{ contactId };
+        Cursor c = getContentResolver().query(uri, projection, selection, selectionArgs, null);
+
+        if(c != null && c.moveToFirst())
+        {
+            res = c.getString(c.getColumnIndex(ContactsContract.RawContacts._ID));
+            c.close();
+        }
+
+        return res;
+    }
+
+    void editContact(Long contactId) {
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+
+        String editName = nameTv.getText().toString();
+        String editPhoneNum = phoneNumTv.getText().toString();
+
+        try {
+            operations.add(
+                    ContentProviderOperation.newUpdate(ContactsContract.RawContacts.CONTENT_URI)
+                            .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                            .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                            .build()
+            );
+
+            String selectName = ContactsContract.Data.CONTACT_ID + "=? AND " + ContactsContract.Data.MIMETYPE + "='" + "=?";
+
+            String contact_id = contactId.toString();
+            long raw_contact_id = Long.parseLong(getRawContactId(contact_id));
+            String[] args1 = new String[] {contact_id, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
+
+
+            operations.add(
+                    ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                            .withSelection(selectName, args1)
+                            .withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME, editName)
+                            .build()
+            );
+
+            String selectPhone = ContactsContract.Data.CONTACT_ID + "=? AND " + ContactsContract.Data.MIMETYPE + "='"  +
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "'" + " AND " + ContactsContract.CommonDataKinds.Phone.TYPE + "=?";
+            String[] args = new String[] {contact_id, String.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)};
+
+            operations.add(
+                    ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                            .withSelection(selectPhone, args)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, editPhoneNum)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                            .build()
+            );
+
+            getContentResolver().applyBatch(ContactsContract.AUTHORITY, operations);
+            operations.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+ */
 }

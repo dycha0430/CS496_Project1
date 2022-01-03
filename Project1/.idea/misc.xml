@@ -6,6 +6,7 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2640625" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/game_start_btn.xml" value="0.378125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/ic_baseline_call_24.xml" value="0.378125" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.2630208333333333" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/ic_baseline_message_24.xml" value="0.21875" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.2640625" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.2640625" />
@@ -15,7 +16,8 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/profile_background.xml" value="0.2578125" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/drawable/radius.xml" value="0.20277777777777778" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/font/font_custom.xml" value="0.2171875" />
-        <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/activity_contact_detail.xml" value="0.25" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/activity_contact_detail.xml" value="0.5" />
+        <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/activity_full_image.xml" value="0.246875" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/activity_help.xml" value="0.246875" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/fragment_dashboard.xml" value="0.2046875" />

@@ -20,6 +20,15 @@
         android:fontFamily="@font/font_custom"
         app:icon="@android:drawable/ic_input_add" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
+        app:queryHint="검색어를 입력하세요">
+
+    </androidx.appcompat.widget.SearchView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/phoneList"
         android:layout_width="match_parent"

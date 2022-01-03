@@ -46,6 +46,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -70,6 +71,7 @@ public class PhoneTabFragment extends Fragment {
     private ArrayList<ContactData> contactData;
     private Uri profileImageUri;
     private ImageView profileImageView;
+    private SearchView searchBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class PhoneTabFragment extends Fragment {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.phoneList);
         addPhoneNumBtn = (Button) rootView.findViewById(R.id.addPhoneNumBtn);
+        searchBar = (SearchView) rootView.findViewById(R.id.searchBar);
 
         contactData = getContacts(getActivity());
 
@@ -89,6 +92,20 @@ public class PhoneTabFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 addBtnClicked(getActivity());
+            }
+        });
+
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                phoneTabAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                phoneTabAdapter.getFilter().filter(newText);
+                return false;
             }
         });
 
@@ -221,7 +238,7 @@ public class PhoneTabFragment extends Fragment {
 //        textView.setTypeface(face);
     }
 
-    public void addContacts(Context context, String name, String phoneNum) {
+    void addContacts(Context context, String name, String phoneNum) {
         ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
         try {
