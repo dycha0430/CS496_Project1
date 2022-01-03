@@ -156,6 +156,7 @@ public class PhoneTabFragment extends Fragment {
         imageBtn.setText("프로필 이미지");
         imageBtn.setTextSize(18);
         imageBtn.setBackground(ContextCompat.getDrawable(context, R.drawable.radius));
+        imageBtn.setTextColor(Color.parseColor("#FFFFFFFF"));
 
         imageBtn.setSingleLine(true);
 
@@ -277,7 +278,7 @@ public class PhoneTabFragment extends Fragment {
 
             // Bitmap to Byte array
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
             byte[] byteArray = stream.toByteArray();
             bitmap.recycle();
 

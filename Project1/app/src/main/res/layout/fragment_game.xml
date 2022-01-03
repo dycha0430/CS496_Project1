@@ -1198,7 +1198,8 @@
             android:singleLine="true"
             android:text="START"
             android:background="@drawable/radius"
-            android:textSize="13sp"/>
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="30dp"
