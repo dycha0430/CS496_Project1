@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -227,7 +228,7 @@ public class GameFragment extends Fragment {
         width -= width_padding;
 
         if (height / width < 1.2) {
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) gameTable.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams = (FrameLayout.LayoutParams) gameTable.getLayoutParams();
 //            TableLayout.LayoutParams layoutParams = (TableLayout.LayoutParams) gameTable.getLayoutParams();
             layoutParams.width = (int) ((double) height / 1.2);
             gameTable.setLayoutParams(layoutParams);
