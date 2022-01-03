@@ -16,6 +16,7 @@
         android:backgroundTint="#98D7F8"
         android:fontFamily="@font/font_custom"
         android:text="사진 추가하기"
+        android:textSize="18sp"
         android:textColor="#FFFFFF"
         app:icon="@android:drawable/ic_input_add" />
 
