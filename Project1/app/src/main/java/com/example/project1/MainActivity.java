@@ -37,14 +37,15 @@ public class MainActivity extends AppCompatActivity {
         int contactWritePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS);
         int storageReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int storageWritePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (contactReadPermission != PackageManager.PERMISSION_GRANTED || contactWritePermission != PackageManager.PERMISSION_GRANTED ||
-                storageReadPermission != PackageManager.PERMISSION_GRANTED || storageWritePermission != PackageManager.PERMISSION_GRANTED) {
+                storageReadPermission != PackageManager.PERMISSION_GRANTED || storageWritePermission != PackageManager.PERMISSION_GRANTED || cameraPermission != PackageManager.PERMISSION_GRANTED) {
             requestPermission();
         }
     }
 
     void requestPermission() {
-        String[] permissions = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[] permissions = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
         ActivityCompat.requestPermissions(this, permissions, 321);
     }
 

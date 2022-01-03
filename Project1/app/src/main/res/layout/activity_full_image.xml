@@ -20,12 +20,12 @@
         android:textColor="#FFFFFF"
         app:icon="@android:drawable/ic_delete" />
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/photoView"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/photoViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scaleType="centerInside" />
+        android:layout_height="match_parent" />
+
+
 
 
 </LinearLayout>

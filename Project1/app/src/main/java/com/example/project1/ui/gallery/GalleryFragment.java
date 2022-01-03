@@ -57,10 +57,10 @@ public class GalleryFragment extends Fragment {
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
 
+    Uri addImageUri;
     protected Context context;
     protected ImageAdapter imageAdapter;
     Button button;
-    private Uri addImageUri;
     private ImageView addImageView;
     JSONObject jsonObject;
 
@@ -200,7 +200,8 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity().getApplicationContext(), FullImageActivity.class);
-                i.putExtra("id", images.get(position).toString());
+                i.putExtra("id", position);
+                i.putStringArrayListExtra("id2", images);
                 startActivity(i);
             }
         });
