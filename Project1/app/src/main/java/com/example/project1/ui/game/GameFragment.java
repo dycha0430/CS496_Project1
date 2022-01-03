@@ -228,6 +228,7 @@ public class GameFragment extends Fragment {
         width -= width_padding;
 
         if (height / width < 1.2) {
+            // hi
             ViewGroup.LayoutParams layoutParams = (FrameLayout.LayoutParams) gameTable.getLayoutParams();
 //            TableLayout.LayoutParams layoutParams = (TableLayout.LayoutParams) gameTable.getLayoutParams();
             layoutParams.width = (int) ((double) height / 1.2);
