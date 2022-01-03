@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -18,12 +20,13 @@ import android.widget.ImageView;
 import com.example.project1.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ImageAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<String> images;
+    public ArrayList<String> images;
 
     public ImageAdapter(Context c, ArrayList<String> images) {
         context = c;
@@ -47,7 +50,43 @@ public class ImageAdapter extends BaseAdapter {
         }
         return null;
     }
+    public Bitmap getRotatedBitmap(Bitmap bitmap, int degrees) throws Exception {
+        if(bitmap == null) return null;
+        if (degrees == 0) return bitmap;
 
+        Matrix m = new Matrix();
+        m.setRotate(degrees, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
+
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+    }
+
+    public int getOrientationOfImage(String filepath) {
+        ExifInterface exif = null;
+
+        try {
+            exif = new ExifInterface(filepath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+
+        if (orientation != -1) {
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    return 90;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    return 180;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    return 270;
+            }
+        }
+
+        return 0;
+    }
     //Path(파일경로) -> Uri
 
 
@@ -72,12 +111,18 @@ public class ImageAdapter extends BaseAdapter {
         if (null != convertView) {
             imageview = (ImageView) convertView;
         }
-        int a = parent.getWidth();
         imageview = new ImageView(context);
         imageview.setLayoutParams(new GridView.LayoutParams(parent.getWidth()/3-15, parent.getWidth()/3-15));
+        int orient = getOrientationOfImage(images.get(position));
         Bitmap myBitmap = BitmapFactory.decodeFile(images.get(position));
-        imageview.setImageBitmap(myBitmap);
-        //Log.d("set", images.get(position));
+        Bitmap newBitmap = null;
+        try {
+            newBitmap = getRotatedBitmap(myBitmap, orient);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        imageview.setImageBitmap(newBitmap);
+
         imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageview;
     }
