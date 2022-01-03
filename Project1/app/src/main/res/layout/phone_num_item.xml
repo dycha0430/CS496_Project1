@@ -33,11 +33,21 @@
     </LinearLayout>
 
     <ImageButton
+        android:id="@+id/messageBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:scaleType="fitXY"
+        android:padding="8dp"
+        android:src="@drawable/ic_baseline_message_24" />
+
+    <ImageButton
         android:id="@+id/callBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@color/white"
         android:scaleType="fitXY"
+        android:padding="8dp"
         android:src="@drawable/ic_baseline_call_24" />
 
 

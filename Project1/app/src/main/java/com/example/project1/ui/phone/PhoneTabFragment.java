@@ -46,6 +46,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -69,7 +70,6 @@ public class PhoneTabFragment extends Fragment {
     private ArrayList<ContactData> contactData;
     private Uri profileImageUri;
     private ImageView profileImageView;
-    private ItemTouchHelper itemTouchHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -83,10 +83,6 @@ public class PhoneTabFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         phoneTabAdapter = new PhoneTabAdapter(getActivity(), contactData);
 
-
-        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(phoneTabAdapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
         recyclerView.setAdapter(phoneTabAdapter);
 
         addPhoneNumBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +94,6 @@ public class PhoneTabFragment extends Fragment {
 
 
         return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     ActivityResultLauncher<Intent> getImageActivityResultLauncher = registerForActivityResult(
@@ -139,7 +130,7 @@ public class PhoneTabFragment extends Fragment {
         final EditText numInput = new EditText(getActivity());
         numInput.setInputType(InputType.TYPE_CLASS_PHONE);
         numInput.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        int maxLength = 13;
+        int maxLength = 15;
         numInput.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
         numInput.setHint("전화번호를 입력하세요");
         numInput.setHintTextColor(Color.GRAY);
@@ -332,8 +323,6 @@ public class PhoneTabFragment extends Fragment {
                 data.setName(name);
                 data.setPhoneNum(phoneNum);
                 data.setContactId(contactId);
-
-                Log.d("PhoneTabFragment", "Hello" + name + imageUri);
                 datas.add(data);
             }
         }

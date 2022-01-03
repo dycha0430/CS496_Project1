@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.provider.Telephony;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,7 @@ import com.example.project1.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHolder> implements ItemTouchHelperListener {
+public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHolder>{
     private Context context;
     private ArrayList<ContactData> contactList;
     public PhoneTabAdapter(Context context, ArrayList<ContactData> contactList) {
@@ -63,31 +65,41 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             }
         });
 
+        holder.messageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.putExtra("sms_body", "");
+                intent.setData(Uri.parse("smsto:" + contactData.getPhoneNum()));
+                context.startActivity(intent);
+            }
+        });
+
         // Long click으로 삭제
-//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-//
-//                dialog.setMessage("연락처를 삭제하시겠습니까?");
-//                dialog.setCancelable(true);
-//                dialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        removeItemView(position);
-//                    }
-//                });
-//                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                });
-//
-//                dialog.show();
-//                return false;
-//            }
-//        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+
+                dialog.setMessage("연락처를 삭제하시겠습니까?");
+                dialog.setCancelable(true);
+                dialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeItemView(position);
+                    }
+                });
+                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                dialog.show();
+                return false;
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,15 +137,10 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
         this.contactList = contactList;
     }
 
-    @Override
-    public void onItemSwipe(int position) {
-        removeItemView(position);
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView profileImage;
         TextView nameTextView, numTextView;
-        ImageButton callBtn;
+        ImageButton callBtn, messageBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -141,6 +148,7 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
             nameTextView = (TextView)itemView.findViewById(R.id.nameTextView);
             numTextView = (TextView)itemView.findViewById(R.id.numTextView);
             callBtn = (ImageButton) itemView.findViewById(R.id.callBtn);
+            messageBtn = (ImageButton) itemView.findViewById(R.id.messageBtn);
         }
     }
 

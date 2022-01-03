@@ -446,13 +446,11 @@ public class GameFragment extends Fragment {
                 int randomNum = (int)(Math.random() * 9 + 1);
 
                 if (randomNum == 8 || randomNum == 9) {
-                    if ((int)(Math.random() * 10) < 7) {
-                        randomNum = (int)(Math.random() * 9 + 1);
-                    }
+                    randomNum = (int)(Math.random() * 9 + 1);
                 }
 
                 if (randomNum == 6 || randomNum == 7) {
-                    if ((int)(Math.random() * 10) < 5) {
+                    if ((int)(Math.random() * 10) < 8) {
                         randomNum = (int)(Math.random() * 9 + 1);
                     }
                 }

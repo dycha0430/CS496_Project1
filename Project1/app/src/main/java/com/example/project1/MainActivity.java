@@ -10,11 +10,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -26,17 +32,40 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
+    void checkPermission() {
+        int contactReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+        int contactWritePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS);
+        int storageReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int storageWritePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (contactReadPermission != PackageManager.PERMISSION_GRANTED || contactWritePermission != PackageManager.PERMISSION_GRANTED ||
+                storageReadPermission != PackageManager.PERMISSION_GRANTED || storageWritePermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermission();
+        }
+    }
+
+    void requestPermission() {
+        String[] permissions = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        ActivityCompat.requestPermissions(this, permissions, 321);
+    }
+
+    ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+            new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if (result) {
+                        Log.e("AUTHORITY SUCCESS", "hi");
+                    }
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        checkPermission();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
-            checkVerify();
-        }
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -47,56 +76,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public void checkVerify()
-    {
-        if (
-                checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED )
-        {
-            // Should we show an explanation?
-            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS))
-            {
-                // ...
-            }
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS },
-                    1);
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == 1)
-        {
-            if (grantResults.length > 0)
-            {
-                for (int i=0; i<grantResults.length; ++i)
-                {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED)
-                    {
-                        // 하나라도 거부한다면.
-                        new AlertDialog.Builder(this).setTitle("알림").setMessage("권한을 허용해주셔야 앱을 이용할 수 있습니다.")
-                                .setPositiveButton("종료", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        MainActivity.this.finish();
-                                    }
-                                }).setNegativeButton("권한 설정", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                        .setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
-                                getApplicationContext().startActivity(intent);
-                            }
-                        }).setCancelable(false).show();
-
-                        return;
-                    }
-                }
-            }
-        }
     }
 }
