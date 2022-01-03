@@ -8,6 +8,8 @@
           <Key>
             <type value="SERIAL_NUMBER" />
             <value value="R3CNB0EZPJA" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="$USER_HOME$/.android/avd/Nexus_5_API_26.avd" />
           </Key>
         </deviceKey>
       </Target>
