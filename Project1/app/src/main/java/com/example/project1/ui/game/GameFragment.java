@@ -1,12 +1,16 @@
 package com.example.project1.ui.game;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +18,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.example.project1.MainActivity;
 import com.example.project1.R;
 import com.example.project1.ui.phone.ContactDetailActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 import java.util.Timer;
@@ -36,6 +45,8 @@ public class GameFragment extends Fragment {
     TextView timerTextView, scoreTextView;
     boolean playing;
     int score;
+    TableLayout gameTable;
+    ImageView readyImageView;
 
 
     /* Timer */
@@ -44,6 +55,7 @@ public class GameFragment extends Fragment {
     private Timer timer;
     private final Handler handler;
     Handler handler2 = new Handler();
+    Handler readyHandler = new Handler();
 
     /* Game board item */
     class PeachItem {
@@ -132,6 +144,16 @@ public class GameFragment extends Fragment {
         helpBtn = (ImageButton) rootView.findViewById(R.id.helpBtn);
         timerTextView = (TextView) rootView.findViewById(R.id.timerTextView);
         scoreTextView = (TextView) rootView.findViewById(R.id.scoreTextView);
+        gameTable = (TableLayout) rootView.findViewById(R.id.gameTable);
+        readyImageView = (ImageView) rootView.findViewById(R.id.readyImageView);
+        final LinearLayout gameBar = (LinearLayout) rootView.findViewById(R.id.gameBar);
+
+        gameBar.post(new Runnable() {
+            @Override
+            public void run() {
+                adjustGameMapSize(gameBar.getHeight());
+            }
+        });
 
         init(rootView);
 
@@ -141,12 +163,78 @@ public class GameFragment extends Fragment {
                 if (playing) {
                     resetGame();
                 } else {
-                    startGame();
+                    handler2.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            readyImageView.setImageResource(R.drawable.peach3);
+                            handler2.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    readyImageView.setImageResource(R.drawable.peach2);
+                                    handler2.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            readyImageView.setImageResource(R.drawable.peach1);
+                                            handler2.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    readyImageView.setImageResource(R.drawable.start_peach);
+                                                    handler2.postDelayed(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            startGame();
+                                                        }
+                                                    }, 500);
+                                                }
+                                            }, 1000);
+                                        }
+                                    }, 1000);
+                                }
+                            }, 1000);
+                        }
+                    }, 1000);
                 }
             }
         });
         return rootView;
     }
+
+    void adjustGameMapSize(int gameBarHeight) {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        float width = size.x;
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int dpi = dm.densityDpi;
+        float density = dm.density;
+
+        int status_bar_size = 0;
+        int resourceId;
+        resourceId = getActivity().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            status_bar_size = (int) getActivity().getResources().getDimension(resourceId);
+        }
+
+        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
+        int bottom_bar_size = bnv.getHeight();
+        Log.d("game bar Height!", gameBarHeight + " " + bottom_bar_size);
+        int other_heights = Math.round((float) density * (10)) + bottom_bar_size * 2 + gameBarHeight + status_bar_size;
+        float height = size.y - other_heights;
+
+        int width_padding = Math.round((float) density * 10);
+        width -= width_padding;
+
+        if (height / width < 1.2) {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) gameTable.getLayoutParams();
+//            TableLayout.LayoutParams layoutParams = (TableLayout.LayoutParams) gameTable.getLayoutParams();
+            layoutParams.width = (int) ((double) height / 1.2);
+            gameTable.setLayoutParams(layoutParams);
+            Log.d("hello!!", "Width : " + width + " Height : " + height + " adjust width : " + (int) ((double) height / 1.2));
+        }
+    }
+
 
     void startTimer() {
         timer = new Timer();
@@ -188,6 +276,9 @@ public class GameFragment extends Fragment {
             }
         }
 
+        readyImageView.setVisibility(View.INVISIBLE);
+        gameTable.setVisibility(View.VISIBLE);
+
         playing = true;
         gameBtn.setText("RESET");
         startTimer();
@@ -212,6 +303,11 @@ public class GameFragment extends Fragment {
         leftTime = TOTAL_TIME;
         setTimerView(TOTAL_TIME);
         setScoreView(0);
+
+        readyImageView.setVisibility(View.VISIBLE);
+        gameTable.setVisibility(View.INVISIBLE);
+        readyImageView.setImageResource(R.drawable.ready_peach);
+
         initGame();
     }
 
@@ -366,6 +462,8 @@ public class GameFragment extends Fragment {
             }
         }
     }
+
+
 
     @Override
     public void onDestroyView() {

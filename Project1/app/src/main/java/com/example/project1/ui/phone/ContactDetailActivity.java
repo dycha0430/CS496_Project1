@@ -35,8 +35,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         String imageUriString = intent.getStringExtra("imageUri");
 
         Uri imageUri;
-        if (imageUriString == "empty") {
-            Log.d("HHHHHHH", imageUriString);
+        if (imageUriString.equals("empty")) {
             profileImage.setImageResource(R.drawable.user);
         } else {
             imageUri = Uri.parse(imageUriString);
