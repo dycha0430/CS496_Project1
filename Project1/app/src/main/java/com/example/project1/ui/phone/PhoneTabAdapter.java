@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,14 +25,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project1.R;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHolder>{
+public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHolder> implements Filterable {
     private Context context;
     private ArrayList<ContactData> contactList;
+    private ArrayList<ContactData> filteredContactList;
     public PhoneTabAdapter(Context context, ArrayList<ContactData> contactList) {
         this.context = context;
         this.contactList = contactList;
+        this.filteredContactList = contactList;
     }
 
     @NonNull
@@ -43,7 +48,7 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull PhoneTabAdapter.ViewHolder holder, int position) {
-        final ContactData contactData = contactList.get(position);
+        final ContactData contactData = filteredContactList.get(position);
 
         holder.nameTextView.setText(contactData.getName());
         holder.numTextView.setText(contactData.getPhoneNum());
@@ -107,6 +112,7 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
                 Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
                 intent.putExtra("name", contactData.getName());
                 intent.putExtra("phoneNum", contactData.getPhoneNum());
+                intent.putExtra("contactId", contactData.getContactId());
                 if (contactData.getProfileRes() != null) {
                     intent.putExtra("imageUri", contactData.getProfileRes().toString());
                 } else {
@@ -120,14 +126,14 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return contactList.size();
+        return filteredContactList.size();
     }
 
     private void removeItemView(int position) {
-        Long contactId = contactList.get(position).getContactId();
-        contactList.remove(position);
+        Long contactId = filteredContactList.get(position).getContactId();
+        filteredContactList.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, contactList.size());
+        notifyItemRangeChanged(position, filteredContactList.size());
 
         context.getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.CONTACT_ID + "=" + contactId, null);
     }
@@ -135,6 +141,40 @@ public class PhoneTabAdapter extends RecyclerView.Adapter<PhoneTabAdapter.ViewHo
 
     public void setContactList(ArrayList<ContactData> contactList) {
         this.contactList = contactList;
+        this.filteredContactList = contactList;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredContactList = contactList;
+                } else {
+                    ArrayList<ContactData> filteringList = new ArrayList<>();
+                    for (ContactData data : contactList) {
+                        if (data.getName().contains(charString)) {
+                            filteringList.add(data);
+                        }
+                    }
+                    filteredContactList = filteringList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredContactList;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredContactList = (ArrayList<ContactData>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
