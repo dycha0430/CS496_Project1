@@ -128,6 +128,7 @@ public class GameFragment extends Fragment {
                     CustomDialog customDialog = new CustomDialog(getActivity(), score, getActivity());
                     customDialog.setCancelable(false);
 
+
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     WindowManager.LayoutParams params = customDialog.getWindow().getAttributes();
                     params.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -217,7 +218,7 @@ public class GameFragment extends Fragment {
 
         BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
         int bottom_bar_size = bnv.getHeight();
-        Log.d("game bar Height!", gameBarHeight + " " + bottom_bar_size);
+
         int other_heights = Math.round((float) density * (10)) + bottom_bar_size * 2 + gameBarHeight + status_bar_size;
         float height = size.y - other_heights;
 
@@ -230,7 +231,6 @@ public class GameFragment extends Fragment {
 //            TableLayout.LayoutParams layoutParams = (TableLayout.LayoutParams) gameTable.getLayoutParams();
             layoutParams.width = (int) ((double) height / 1.2);
             gameTable.setLayoutParams(layoutParams);
-            Log.d("hello!!", "Width : " + width + " Height : " + height + " adjust width : " + (int) ((double) height / 1.2));
         }
     }
 

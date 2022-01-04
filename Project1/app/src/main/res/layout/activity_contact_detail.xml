@@ -92,11 +92,11 @@
         android:id="@+id/editContactBtn"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:text="연락처 수정하기"
+        android:layout_marginTop="30dp"
         android:background="@drawable/radius"
+        android:singleLine="true"
+        android:text="연락처 수정 완료"
         android:textColor="@color/white"
-        android:textSize="13sp"/>
+        android:textSize="13sp" />
 </LinearLayout>

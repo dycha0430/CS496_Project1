@@ -123,11 +123,7 @@ public class ImageAdapter extends BaseAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        newBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
-        byte[] byteArray = stream.toByteArray();
-        Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-        imageview.setImageBitmap(compressedBitmap);
+        imageview.setImageBitmap(myBitmap);
 
         imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageview;
