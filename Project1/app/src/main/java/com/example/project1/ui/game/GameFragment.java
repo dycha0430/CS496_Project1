@@ -53,7 +53,7 @@ public class GameFragment extends Fragment {
 
 
     /* Timer */
-    private final int TOTAL_TIME = 80;
+    private final int TOTAL_TIME = 10;
     int leftTime = TOTAL_TIME;
     private Timer timer;
     private final Handler handler;
