@@ -49,6 +49,8 @@ public class GameFragment extends Fragment {
     TableLayout gameTable;
     ImageView readyImageView;
 
+    ViewGroup rootView;
+
 
     /* Timer */
     private final int TOTAL_TIME = 80;
@@ -139,7 +141,7 @@ public class GameFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
 
         gameBtn = (Button) rootView.findViewById(R.id.gameBtn);
         helpBtn = (ImageButton) rootView.findViewById(R.id.helpBtn);
@@ -156,7 +158,7 @@ public class GameFragment extends Fragment {
             }
         });
 
-        init(rootView);
+        init();
 
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,6 +295,9 @@ public class GameFragment extends Fragment {
     }
 
     void initVars() {
+        peaches = new PeachItem[12][10];
+        getPeaches(rootView);
+
         score = 0;
         clickedPeachNum = 0;
         playing = false;
@@ -308,15 +313,14 @@ public class GameFragment extends Fragment {
         initGame();
     }
 
-    void init(ViewGroup rootView) {
+    void init() {
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 helpBtnClicked();
             }
         });
-        peaches = new PeachItem[12][10];
-        getPeaches(rootView);
+
         initVars();
         setPeachOnClickListener();
     }
