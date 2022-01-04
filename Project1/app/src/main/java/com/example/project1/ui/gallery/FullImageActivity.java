@@ -198,15 +198,25 @@ public class FullImageActivity extends AppCompatActivity {
                 //--------read-------//
                 try {
                     br = new BufferedReader(new FileReader(getFilesDir()+"gallery_new.json"));
+
+                    String readStr2 = "";
                     String str = null;
                     while(true){
                         if (!((str=br.readLine())!=null)) break;
-                        JSONObject jsonobject2 = new JSONObject(str);
-                        String bitmapString = jsonobject2.getString("bitmap");
-
-                        //if (!images.get(viewPager2.getCurrentItem()).equals(StringToBitmap(bitmapString))) readStr += str + "\n";
-                        if (!bitmapString.equals(BitmapToString(images.get(viewPager2.getCurrentItem())))) readStr+=str+"@";
+                        readStr2 += str+"\n";
                     }
+
+                    String[] bitmapArray = readStr2.split("@");
+
+                    for (String bitmapString : bitmapArray) {
+                        JSONObject jsonobject2 = new JSONObject(bitmapString);
+                        String tmpBitmapString = jsonobject2.getString("bitmap");
+
+                        Log.d("!!!!!!!!!!!!!!!!!!11", tmpBitmapString + "\n\n\n" + BitmapToString(images.get(viewPager2.getCurrentItem())));
+                        if (!tmpBitmapString.equals(BitmapToString(images.get(viewPager2.getCurrentItem())))) readStr+=str+"@";
+                    }
+
+
                     br.close();
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
@@ -216,11 +226,11 @@ public class FullImageActivity extends AppCompatActivity {
                 String blank = "";
                 BufferedWriter bm = null;
                 try {
-                    bm = new BufferedWriter(new FileWriter(getFilesDir() + "gallery2.json", false));
+                    bm = new BufferedWriter(new FileWriter(getFilesDir() + "gallery_new.json", false));
                     bm.write(blank);
                     bm.close();
 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "gallery2.json", true));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "gallery_new.json", true));
                     bw.write(readStr);
                     bw.close();
                 } catch (IOException e) {
