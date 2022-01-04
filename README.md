@@ -5,7 +5,7 @@ Peach10 is an gaming app that allows you to save and share records achieved whil
 Dayun Cha  
 Wonjae Lee
 
-## Features
+## Abstract
 - Contacts
 - Gallery
 - Simple puzzle game
