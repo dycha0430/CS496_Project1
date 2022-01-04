@@ -216,11 +216,11 @@ public class FullImageActivity extends AppCompatActivity {
                 String blank = "";
                 BufferedWriter bm = null;
                 try {
-                    bm = new BufferedWriter(new FileWriter(getFilesDir() + "gallery2.json", false));
+                    bm = new BufferedWriter(new FileWriter(getFilesDir() + "gallery_new.json", false));
                     bm.write(blank);
                     bm.close();
 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "gallery2.json", true));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "gallery_new.json", true));
                     bw.write(readStr);
                     bw.close();
                 } catch (IOException e) {

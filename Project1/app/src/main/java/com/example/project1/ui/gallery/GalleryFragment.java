@@ -155,7 +155,7 @@ public class GalleryFragment extends Fragment {
         images = new ArrayList<>();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader(getActivity().getFilesDir() + "gallery2.json"));
+            br = new BufferedReader(new FileReader(getActivity().getFilesDir() + "gallery_new.json"));
             String readStr = "";
             String str = null;
             while (true) {
