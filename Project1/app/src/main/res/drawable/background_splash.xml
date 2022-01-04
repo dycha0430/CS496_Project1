@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/white"/>
-    <item>
+    <item android:drawable="@color/peach_back"/>
+    <item
+        android:width="120dp"
+        android:height="173dp"
+        android:gravity="center"
+        android:layout_gravity="center">
+
         <bitmap
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:src="@drawable/peach" />
+            android:gravity="fill"
+            android:src="@drawable/peach_splash" >
+
+        </bitmap>
     </item>
 </layer-list>

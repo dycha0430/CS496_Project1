@@ -65,6 +65,7 @@ public class ImageAdapter extends BaseAdapter {
 
         imageview.setImageBitmap(images.get(position));
 
+
         imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageview;
     }
