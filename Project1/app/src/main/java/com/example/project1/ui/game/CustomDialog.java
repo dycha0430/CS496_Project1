@@ -88,7 +88,6 @@ public class CustomDialog extends Dialog {
         view.buildDrawingCache();
         Bitmap captureView = view.getDrawingCache();
 
-        MediaStore.Images.Media.
         MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(), captureView, "Peach Game Result", "복숭아 게임 결과 캡쳐");
         /*
         FileOutputStream fos;
