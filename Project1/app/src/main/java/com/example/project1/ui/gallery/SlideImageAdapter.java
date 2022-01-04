@@ -18,9 +18,10 @@ import java.util.ArrayList;
 
 public class SlideImageAdapter  extends RecyclerView.Adapter<ViewHolderPage>{
 
-    private ArrayList<String> photos;
-    SlideImageAdapter(ArrayList<String> list) {
-            this.photos = list;
+    private ArrayList<Bitmap> photos;
+    SlideImageAdapter() {
+        GalleryFragment gf = new GalleryFragment();
+        this.photos = gf.images;
     }
 
     @NonNull
@@ -30,23 +31,11 @@ public class SlideImageAdapter  extends RecyclerView.Adapter<ViewHolderPage>{
         View view = LayoutInflater.from(context).inflate(R.layout.photo_viewpager, parent, false);
         return new ViewHolderPage(view);
     }
-
-    public static Bitmap StringToBitmap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolderPage holder, int position) {
         if (holder instanceof ViewHolderPage) {
             ViewHolderPage viewHolder = (ViewHolderPage) holder;
-            viewHolder.onBind(StringToBitmap(photos.get(position)));
+            viewHolder.onBind(photos.get(position));
         }
     }
 

@@ -45,7 +45,7 @@ import java.util.ArrayList;
 public class FullImageActivity extends AppCompatActivity {
 
     Button button;
-    private ArrayList<String> images;
+    private ArrayList<Bitmap> images;
 
     public static Bitmap StringToBitmap(String encodedString) {
         try {
@@ -63,7 +63,7 @@ public class FullImageActivity extends AppCompatActivity {
      * */
     public static String BitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] bytes = baos.toByteArray();
         String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
         return temp;
@@ -147,12 +147,13 @@ public class FullImageActivity extends AppCompatActivity {
         Intent i = getIntent();
         //get images
 
-        images = i.getStringArrayListExtra("id2");
+        GalleryFragment gf = new GalleryFragment();
+        images = gf.images;
 
         int position = i.getExtras().getInt("id");
         ArrayList<PhotoView> list = new ArrayList<>();
         for (int j=0; j<images.size(); j++) {
-            Bitmap myBitmap = StringToBitmap(images.get(j));
+            Bitmap myBitmap = images.get(j);
 //          PhotoView photoView = (PhotoView) findViewById(R.id.photoView);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             myBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
@@ -163,7 +164,7 @@ public class FullImageActivity extends AppCompatActivity {
             list.add(photoView);
         }
 
-        viewPager2.setAdapter(new SlideImageAdapter(images));
+        viewPager2.setAdapter(new SlideImageAdapter());
         viewPager2.setCurrentItem(position);
         viewPager2.getCurrentItem();
         Log.d("@@##", viewPager2.getCurrentItem() + "");
@@ -196,14 +197,15 @@ public class FullImageActivity extends AppCompatActivity {
                 String readStr = "";
                 //--------read-------//
                 try {
-                    br = new BufferedReader(new FileReader(getFilesDir()+"gallery2.json"));
+                    br = new BufferedReader(new FileReader(getFilesDir()+"gallery_new.json"));
                     String str = null;
                     while(true){
                         if (!((str=br.readLine())!=null)) break;
                         JSONObject jsonobject2 = new JSONObject(str);
                         String bitmapString = jsonobject2.getString("bitmap");
 
-                        if (!bitmapString.equals(images.get(viewPager2.getCurrentItem()))) readStr+=str+"\n";
+                        //if (!images.get(viewPager2.getCurrentItem()).equals(StringToBitmap(bitmapString))) readStr += str + "\n";
+                        if (!bitmapString.equals(BitmapToString(images.get(viewPager2.getCurrentItem())))) readStr+=str+"@";
                     }
                     br.close();
                 } catch (IOException | JSONException e) {

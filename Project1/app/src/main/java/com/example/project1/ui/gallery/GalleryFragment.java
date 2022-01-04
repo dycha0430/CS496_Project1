@@ -61,7 +61,7 @@ import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
 
-    private ArrayList<Bitmap> images;
+    public static ArrayList<Bitmap> images;
 
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
@@ -90,7 +90,7 @@ public class GalleryFragment extends Fragment {
      * */
     public static String BitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] bytes = baos.toByteArray();
         String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
         return temp;
@@ -105,7 +105,7 @@ public class GalleryFragment extends Fragment {
             String str = null;
             while(true){
                 if (!((str=br.readLine())!=null)) break;
-                readStr+=str+"\n";
+                readStr+=str+"@";
                 //[B@8ddc290
                 JSONObject jsonobject2 = new JSONObject(str);
                 String tmpBitmapString = jsonobject2.getString("bitmap");
@@ -123,17 +123,63 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        getImages();
+
+        images = new ArrayList<>();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(getActivity().getFilesDir()+"gallery_new.json"));
+            String readStr = "";
+            String str = null;
+            while(true){
+                if (!((str=br.readLine())!=null)) break;
+                readStr+=str+"@";
+                //[B@8ddc290
+                JSONObject jsonobject2 = new JSONObject(str);
+                String tmpBitmapString = jsonobject2.getString("bitmap");
+                Bitmap bitmap = StringToBitmap(tmpBitmapString);
+                if (!images.contains(bitmap)) {
+                    images.add(bitmap);
+                }
+            }
+            br.close();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getImages();
+        images = new ArrayList<>();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(getActivity().getFilesDir() + "gallery2.json"));
+            String readStr = "";
+            String str = null;
+            while (true) {
+                if (!((str = br.readLine()) != null)) break;
+                readStr += str + "\n";
+                JSONObject jsonobject2 = new JSONObject(str);
+                String tmpBitmapString = jsonobject2.getString("bitmap");
+                Bitmap bitmap = StringToBitmap(tmpBitmapString);
+                if (!images.contains(bitmap)) {
+                    images.add(bitmap);
+                }
+            }
+            br.close();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
 
-        imageAdapter.images=images;
+        imageAdapter.images = images;
         imageAdapter.notifyDataSetChanged();
     }
+
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int getOrientationOfImage(Uri uri) {
@@ -185,6 +231,9 @@ public class GalleryFragment extends Fragment {
         imageAdapter = new ImageAdapter(context, images);
         gridView.setAdapter(imageAdapter);
 
+        imageAdapter.images=images;
+        imageAdapter.notifyDataSetChanged();
+
 
         ActivityResultLauncher<Intent> getImageActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -204,18 +253,19 @@ public class GalleryFragment extends Fragment {
                                 e.printStackTrace();
                             }
 
-                            /*
+
                             Bitmap newBitmap = null;
                             try {
                                 newBitmap = getRotatedBitmap(myBitmap, orient);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            /*
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
                             newBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                             byte[] byteArray = stream.toByteArray();
                             Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-                            */
+                             */
                             Log.d("ADD BITMAP", myBitmap + "");
                             addImageView = new ImageView(context);
                             addImageView.setImageURI(addImageUri);
@@ -232,8 +282,10 @@ public class GalleryFragment extends Fragment {
                             imageAdapter.notifyDataSetChanged();
                             jsonObject = new JSONObject();
                             try {
+                                Log.d("ADD BITMAP^^^^^^^", BitmapToString(myBitmap));
                                 jsonObject.put("bitmap", BitmapToString(myBitmap));
-                                String jsonString = jsonObject.toString() + "\n";
+                                String jsonString = jsonObject.toString() + "@";
+                                Log.d("JSON STRING&&&&&&&&&&&", jsonString);
                                 BufferedWriter bw = new BufferedWriter(new FileWriter(context.getFilesDir() + "gallery_new.json", true));
                                 bw.write(jsonString);
                                 bw.close();
@@ -273,12 +325,7 @@ public class GalleryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), FullImageActivity.class);
                 intent.putExtra("id", position);
-                ArrayList<String> arrayList = new ArrayList<>();
-                for (int i = 0; i < images.size(); i++) {
-                    arrayList.add(BitmapToString(images.get(i)));
 
-                }
-                intent.putStringArrayListExtra("id2", arrayList);
                 startActivity(intent);
             }
         });
