@@ -1,5 +1,7 @@
 package com.example.project1.ui.gallery;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentUris;
@@ -68,6 +70,7 @@ public class GalleryFragment extends Fragment {
     protected Context context;
     protected ImageAdapter imageAdapter;
     Button button;
+    Button cmbutton;
     private ImageView addImageView;
     JSONObject jsonObject;
 
@@ -189,7 +192,7 @@ public class GalleryFragment extends Fragment {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getResultCode() == RESULT_OK) {
                             Intent data = result.getData();
                             addImageUri = data.getData();
 
@@ -253,6 +256,17 @@ public class GalleryFragment extends Fragment {
                 getImageActivityResultLauncher.launch(intent);
             }
         });
+
+//        cmbutton = (Button) rootView.findViewById(R.id.cameraBtn);
+//        cmbutton.setOnClickListener(new View. OnClickListener() {
+//           @Override
+//           public void onClick(View v) {
+//               Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//               startActivity(takePictureIntent);
+//
+//           }
+//        });
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

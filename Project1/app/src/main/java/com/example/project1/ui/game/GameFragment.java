@@ -157,7 +157,7 @@ public class GameFragment extends Fragment {
             }
         });
 
-        init(rootView);
+        init();
 
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,6 +283,9 @@ public class GameFragment extends Fragment {
     }
 
     void initVars() {
+        peaches = new PeachItem[12][10];
+        getPeaches(rootView);
+
         score = 0;
         clickedPeachNum = 0;
         clickedPeaches[0] = null;
@@ -313,15 +316,14 @@ public class GameFragment extends Fragment {
         startActivity(intent);
     }
 
-    void init(ViewGroup rootView) {
+    void init() {
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 helpBtnClicked();
             }
         });
-        peaches = new PeachItem[12][10];
-        getPeaches(rootView);
+
         initVars();
         setPeachOnClickListener();
     }
