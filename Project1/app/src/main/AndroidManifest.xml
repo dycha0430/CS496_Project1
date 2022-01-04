@@ -25,14 +25,8 @@
             android:theme="@style/SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
-<<<<<<< HEAD
-                <action android:name="android.intent.action.MAIN"/>
+               <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-=======
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
->>>>>>> a43f27b2c93489c4a9e2c9a309bd43477998f50d
             </intent-filter>
         </activity>
 
