@@ -49,14 +49,14 @@ public class GameFragment extends Fragment {
     TableLayout gameTable;
     ImageView readyImageView;
 
+    ViewGroup rootView;
 
     /* Timer */
-    private final int TOTAL_TIME = 80;
+    private final int TOTAL_TIME = 10;
     int leftTime = TOTAL_TIME;
     private Timer timer;
     private final Handler handler;
     Handler handler2 = new Handler();
-    Handler readyHandler = new Handler();
 
     /* Game board item */
     class PeachItem {
@@ -114,6 +114,7 @@ public class GameFragment extends Fragment {
     private int clickedPeachNum;
 
 
+
     public GameFragment() {
         handler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -139,7 +140,7 @@ public class GameFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
 
         gameBtn = (Button) rootView.findViewById(R.id.gameBtn);
         helpBtn = (ImageButton) rootView.findViewById(R.id.helpBtn);
@@ -281,20 +282,11 @@ public class GameFragment extends Fragment {
         startTimer();
     }
 
-    void resetGame() {
-        stopTimer();
-        initVars();
-    }
-
-    void helpBtnClicked() {
-        Intent intent = new Intent(getActivity(), HelpActivity.class);
-
-        startActivity(intent);
-    }
-
     void initVars() {
         score = 0;
         clickedPeachNum = 0;
+        clickedPeaches[0] = null;
+        clickedPeaches[1] = null;
         playing = false;
         gameBtn.setText("START");
         leftTime = TOTAL_TIME;
@@ -306,6 +298,19 @@ public class GameFragment extends Fragment {
         readyImageView.setImageResource(R.drawable.ready_peach);
 
         initGame();
+    }
+
+    void resetGame() {
+        peaches = new PeachItem[12][10];
+        getPeaches(rootView);
+        stopTimer();
+        initVars();
+    }
+
+    void helpBtnClicked() {
+        Intent intent = new Intent(getActivity(), HelpActivity.class);
+
+        startActivity(intent);
     }
 
     void init(ViewGroup rootView) {
