@@ -37,13 +37,36 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"/>
 
-    <Button
-        android:id="@+id/positiveButton"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textSize="18sp"
-        android:background="#FFABAB"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/guideline"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/pink"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="저장 후 공유">
+
+
+        </androidx.appcompat.widget.AppCompatButton>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/positiveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:background="@color/violet"
+            android:textStyle="bold"
+            android:text="다시 하기">
+
+       </androidx.appcompat.widget.AppCompatButton>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

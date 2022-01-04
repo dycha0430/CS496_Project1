@@ -49,9 +49,11 @@ public class GameFragment extends Fragment {
     TableLayout gameTable;
     ImageView readyImageView;
 
+    ViewGroup rootView;
+
 
     /* Timer */
-    private final int TOTAL_TIME = 80;
+    private final int TOTAL_TIME = 10;
     int leftTime = TOTAL_TIME;
     private Timer timer;
     private final Handler handler;
@@ -123,7 +125,7 @@ public class GameFragment extends Fragment {
                 setTimerView(leftTime);
                 if (leftTime == 0) {
                     // TODO 점수 띄워주기
-                    CustomDialog customDialog = new CustomDialog(getActivity(), score);
+                    CustomDialog customDialog = new CustomDialog(getActivity(), score, getActivity());
                     customDialog.setCancelable(false);
 
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -139,7 +141,7 @@ public class GameFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
 
         gameBtn = (Button) rootView.findViewById(R.id.gameBtn);
         helpBtn = (ImageButton) rootView.findViewById(R.id.helpBtn);
@@ -156,7 +158,7 @@ public class GameFragment extends Fragment {
             }
         });
 
-        init(rootView);
+        init();
 
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,30 +166,25 @@ public class GameFragment extends Fragment {
                 if (playing) {
                     resetGame();
                 } else {
+                    readyImageView.setImageResource(R.drawable.peach3);
                     handler2.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            readyImageView.setImageResource(R.drawable.peach3);
+                            readyImageView.setImageResource(R.drawable.peach2);
                             handler2.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    readyImageView.setImageResource(R.drawable.peach2);
+                                    readyImageView.setImageResource(R.drawable.peach1);
                                     handler2.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            readyImageView.setImageResource(R.drawable.peach1);
+                                            readyImageView.setImageResource(R.drawable.start_peach);
                                             handler2.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    readyImageView.setImageResource(R.drawable.start_peach);
-                                                    handler2.postDelayed(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            startGame();
-                                                        }
-                                                    }, 500);
+                                                    startGame();
                                                 }
-                                            }, 1000);
+                                            }, 500);
                                         }
                                     }, 1000);
                                 }
@@ -298,6 +295,9 @@ public class GameFragment extends Fragment {
     }
 
     void initVars() {
+        peaches = new PeachItem[12][10];
+        getPeaches(rootView);
+
         score = 0;
         clickedPeachNum = 0;
         playing = false;
@@ -313,15 +313,14 @@ public class GameFragment extends Fragment {
         initGame();
     }
 
-    void init(ViewGroup rootView) {
+    void init() {
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 helpBtnClicked();
             }
         });
-        peaches = new PeachItem[12][10];
-        getPeaches(rootView);
+
         initVars();
         setPeachOnClickListener();
     }

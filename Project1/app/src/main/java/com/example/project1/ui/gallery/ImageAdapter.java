@@ -19,6 +19,7 @@ import android.widget.ImageView;
 
 import com.example.project1.R;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -50,6 +51,7 @@ public class ImageAdapter extends BaseAdapter {
         }
         return null;
     }
+
     public Bitmap getRotatedBitmap(Bitmap bitmap, int degrees) throws Exception {
         if(bitmap == null) return null;
         if (degrees == 0) return bitmap;
@@ -121,7 +123,11 @@ public class ImageAdapter extends BaseAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        imageview.setImageBitmap(newBitmap);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        newBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+        byte[] byteArray = stream.toByteArray();
+        Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+        imageview.setImageBitmap(compressedBitmap);
 
         imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageview;

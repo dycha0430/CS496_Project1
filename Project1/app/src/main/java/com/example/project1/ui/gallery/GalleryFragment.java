@@ -88,6 +88,7 @@ public class GalleryFragment extends Fragment {
 
 
 
+
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -97,6 +98,7 @@ public class GalleryFragment extends Fragment {
             br = new BufferedReader(new FileReader(getActivity().getFilesDir()+"gallery2.json"));
             String readStr = "";
             String str = null;
+
             while(true){
                 if (!((str=br.readLine())!=null)) break;
                 readStr+=str+"\n";
@@ -107,8 +109,9 @@ public class GalleryFragment extends Fragment {
                     images.add(imagePath);
                 }
             }
+
             br.close();
-        } catch (IOException | JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -142,6 +145,7 @@ public class GalleryFragment extends Fragment {
         imageAdapter.images=images;
         imageAdapter.notifyDataSetChanged();
     }
+
 
     @Nullable
     @Override
