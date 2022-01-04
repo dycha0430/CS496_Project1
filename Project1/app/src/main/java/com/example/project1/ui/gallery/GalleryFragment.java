@@ -128,19 +128,26 @@ public class GalleryFragment extends Fragment {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(getActivity().getFilesDir()+"gallery_new.json"));
+
             String readStr = "";
             String str = null;
             while(true){
                 if (!((str=br.readLine())!=null)) break;
-                readStr+=str+"@";
-                //[B@8ddc290
-                JSONObject jsonobject2 = new JSONObject(str);
+                readStr += str+"\n";
+            }
+
+            String[] bitmapArray = readStr.split("@");
+
+            for (String bitmapString : bitmapArray) {
+                JSONObject jsonobject2 = new JSONObject(bitmapString);
                 String tmpBitmapString = jsonobject2.getString("bitmap");
                 Bitmap bitmap = StringToBitmap(tmpBitmapString);
                 if (!images.contains(bitmap)) {
                     images.add(bitmap);
                 }
             }
+
+
             br.close();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -155,19 +162,30 @@ public class GalleryFragment extends Fragment {
         images = new ArrayList<>();
         BufferedReader br = null;
         try {
+<<<<<<< HEAD
             br = new BufferedReader(new FileReader(getActivity().getFilesDir() + "gallery_new.json"));
+=======
+            br = new BufferedReader(new FileReader(getActivity().getFilesDir()+"gallery_new.json"));
+
+>>>>>>> a43f27b2c93489c4a9e2c9a309bd43477998f50d
             String readStr = "";
             String str = null;
-            while (true) {
-                if (!((str = br.readLine()) != null)) break;
-                readStr += str + "\n";
-                JSONObject jsonobject2 = new JSONObject(str);
+            while(true){
+                if (!((str=br.readLine())!=null)) break;
+                readStr += str+"\n";
+            }
+
+            String[] bitmapArray = readStr.split("@");
+
+            for (String bitmapString : bitmapArray) {
+                JSONObject jsonobject2 = new JSONObject(bitmapString);
                 String tmpBitmapString = jsonobject2.getString("bitmap");
                 Bitmap bitmap = StringToBitmap(tmpBitmapString);
                 if (!images.contains(bitmap)) {
                     images.add(bitmap);
                 }
             }
+
             br.close();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
