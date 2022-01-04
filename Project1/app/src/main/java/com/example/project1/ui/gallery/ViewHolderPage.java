@@ -60,17 +60,9 @@ public class ViewHolderPage extends RecyclerView.ViewHolder {
         super(itemView);
         photoView = itemView.findViewById(R.id.photoView);
     }
-    public void onBind(String path) {
-        int orient = getOrientationOfImage(path);
-        Bitmap myBitmap = BitmapFactory.decodeFile(path);
-        Bitmap newBitmap = null;
-        try {
-            newBitmap = getRotatedBitmap(myBitmap, orient);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void onBind(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        newBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byteArray = stream.toByteArray();
         Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
         photoView.setImageBitmap(compressedBitmap);

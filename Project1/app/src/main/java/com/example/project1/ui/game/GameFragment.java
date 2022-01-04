@@ -51,14 +51,12 @@ public class GameFragment extends Fragment {
 
     ViewGroup rootView;
 
-
     /* Timer */
     private final int TOTAL_TIME = 10;
     int leftTime = TOTAL_TIME;
     private Timer timer;
     private final Handler handler;
     Handler handler2 = new Handler();
-    Handler readyHandler = new Handler();
 
     /* Game board item */
     class PeachItem {
@@ -114,6 +112,7 @@ public class GameFragment extends Fragment {
 
     private PeachLoc[] clickedPeaches = new PeachLoc[2];
     private int clickedPeachNum;
+
 
 
     public GameFragment() {
@@ -283,23 +282,14 @@ public class GameFragment extends Fragment {
         startTimer();
     }
 
-    void resetGame() {
-        stopTimer();
-        initVars();
-    }
-
-    void helpBtnClicked() {
-        Intent intent = new Intent(getActivity(), HelpActivity.class);
-
-        startActivity(intent);
-    }
-
     void initVars() {
         peaches = new PeachItem[12][10];
         getPeaches(rootView);
 
         score = 0;
         clickedPeachNum = 0;
+        clickedPeaches[0] = null;
+        clickedPeaches[1] = null;
         playing = false;
         gameBtn.setText("START");
         leftTime = TOTAL_TIME;
@@ -311,6 +301,19 @@ public class GameFragment extends Fragment {
         readyImageView.setImageResource(R.drawable.ready_peach);
 
         initGame();
+    }
+
+    void resetGame() {
+        peaches = new PeachItem[12][10];
+        getPeaches(rootView);
+        stopTimer();
+        initVars();
+    }
+
+    void helpBtnClicked() {
+        Intent intent = new Intent(getActivity(), HelpActivity.class);
+
+        startActivity(intent);
     }
 
     void init() {

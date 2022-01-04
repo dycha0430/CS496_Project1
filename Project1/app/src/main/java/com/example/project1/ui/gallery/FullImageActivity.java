@@ -1,5 +1,6 @@
 package com.example.project1.ui.gallery;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -21,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,30 +38,35 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 public class FullImageActivity extends AppCompatActivity {
 
     Button button;
-    private ArrayList<String> images;
+    private ArrayList<Bitmap> images;
 
-
-    private String uri2path(Uri contentUri) {
-        if (contentUri.getPath().startsWith("/storage")) {
-            return contentUri.getPath();
-        }
-        String id = DocumentsContract.getDocumentId(contentUri).split(":")[1];
-        String[] columns = { MediaStore.Files.FileColumns.DATA };
-        String selection = MediaStore.Files.FileColumns._ID + " = " + id;
-        Cursor cursor = getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
+    public static Bitmap StringToBitmap(String encodedString) {
         try {
-            int columnIndex = cursor.getColumnIndex(columns[0]);
-            if (cursor.moveToFirst()) { return cursor.getString(columnIndex); }
-        } finally {
-            cursor.close();
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
         }
-        return null;
+    }
+
+    /*
+     * Bitmap을 String형으로 변환
+     * */
+    public static String BitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return temp;
     }
 
     public Bitmap getRotatedBitmap(Bitmap bitmap, int degrees) throws Exception {
@@ -100,7 +107,35 @@ public class FullImageActivity extends AppCompatActivity {
         return 0;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int getOrientationOfImage(Uri uri) {
+        ExifInterface exif = null;
 
+        try {
+            InputStream in = getContentResolver().openInputStream(uri);
+            exif = new ExifInterface(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+
+        if (orientation != -1) {
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    return 90;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    return 180;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    return 270;
+            }
+        }
+
+        return 0;
+    }
 
     @SuppressLint("WrongThread")
     @Override
@@ -111,29 +146,25 @@ public class FullImageActivity extends AppCompatActivity {
         //get intent
         Intent i = getIntent();
         //get images
-        images = i.getStringArrayListExtra("id2");
+
+        GalleryFragment gf = new GalleryFragment();
+        images = gf.images;
+
         int position = i.getExtras().getInt("id");
         ArrayList<PhotoView> list = new ArrayList<>();
         for (int j=0; j<images.size(); j++) {
-            String path = images.get(j);
-            int orient = getOrientationOfImage(path);
-            Bitmap myBitmap = BitmapFactory.decodeFile(path);
-            Bitmap newBitmap = null;
-            try {
-                newBitmap = getRotatedBitmap(myBitmap, orient);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-//            PhotoView photoView = (PhotoView) findViewById(R.id.photoView);
+            Bitmap myBitmap = images.get(j);
+//          PhotoView photoView = (PhotoView) findViewById(R.id.photoView);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            newBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
             byte[] byteArray = stream.toByteArray();
             Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
             PhotoView photoView = new PhotoView(this);
             photoView.setImageBitmap(compressedBitmap);
             list.add(photoView);
         }
-        viewPager2.setAdapter(new SlideImageAdapter(images));
+
+        viewPager2.setAdapter(new SlideImageAdapter());
         viewPager2.setCurrentItem(position);
         viewPager2.getCurrentItem();
         Log.d("@@##", viewPager2.getCurrentItem() + "");
@@ -166,13 +197,15 @@ public class FullImageActivity extends AppCompatActivity {
                 String readStr = "";
                 //--------read-------//
                 try {
-                    br = new BufferedReader(new FileReader(getFilesDir()+"gallery2.json"));
+                    br = new BufferedReader(new FileReader(getFilesDir()+"gallery_new.json"));
                     String str = null;
                     while(true){
                         if (!((str=br.readLine())!=null)) break;
                         JSONObject jsonobject2 = new JSONObject(str);
-                        String imagePath = jsonobject2.getString("uri");
-                        if (!imagePath.equals(images.get(viewPager2.getCurrentItem())))readStr+=str+"\n";
+                        String bitmapString = jsonobject2.getString("bitmap");
+
+                        //if (!images.get(viewPager2.getCurrentItem()).equals(StringToBitmap(bitmapString))) readStr += str + "\n";
+                        if (!bitmapString.equals(BitmapToString(images.get(viewPager2.getCurrentItem())))) readStr+=str+"@";
                     }
                     br.close();
                 } catch (IOException | JSONException e) {
@@ -184,27 +217,15 @@ public class FullImageActivity extends AppCompatActivity {
                 BufferedWriter bm = null;
                 try {
                     bm = new BufferedWriter(new FileWriter(getFilesDir() + "gallery2.json", false));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
                     bm.write(blank);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
                     bm.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
+
                     BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "gallery2.json", true));
                     bw.write(readStr);
                     bw.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
 
                 //--------write temp images--------//
                 finish();

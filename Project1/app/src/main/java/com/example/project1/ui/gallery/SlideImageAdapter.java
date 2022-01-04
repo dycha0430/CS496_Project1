@@ -1,6 +1,9 @@
 package com.example.project1.ui.gallery;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +18,10 @@ import java.util.ArrayList;
 
 public class SlideImageAdapter  extends RecyclerView.Adapter<ViewHolderPage>{
 
-    private ArrayList<String> photos;
-    SlideImageAdapter(ArrayList<String> list) {
-            this.photos = list;
+    private ArrayList<Bitmap> photos;
+    SlideImageAdapter() {
+        GalleryFragment gf = new GalleryFragment();
+        this.photos = gf.images;
     }
 
     @NonNull
@@ -27,7 +31,6 @@ public class SlideImageAdapter  extends RecyclerView.Adapter<ViewHolderPage>{
         View view = LayoutInflater.from(context).inflate(R.layout.photo_viewpager, parent, false);
         return new ViewHolderPage(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolderPage holder, int position) {
         if (holder instanceof ViewHolderPage) {
