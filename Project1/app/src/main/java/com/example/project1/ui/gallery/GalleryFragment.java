@@ -113,7 +113,7 @@ public class GalleryFragment extends Fragment {
 
     }
 
-    /*
+
     @Override
     public void onResume() {
         super.onResume();
@@ -142,7 +142,6 @@ public class GalleryFragment extends Fragment {
         imageAdapter.images=images;
         imageAdapter.notifyDataSetChanged();
     }
-    */
 
 
     @Nullable
