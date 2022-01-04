@@ -2,13 +2,18 @@ package com.example.project1.ui.game;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -21,10 +26,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.project1.MainActivity;
 import com.example.project1.R;
+import com.example.project1.ui.gallery.GalleryFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Objects;
@@ -36,6 +47,8 @@ public class CustomDialog extends Dialog {
     private int score;
     private static final String CAPTURE_PATH = "CAPTURE_DIR";
     View currentView;
+    Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +101,41 @@ public class CustomDialog extends Dialog {
         view.buildDrawingCache();
         Bitmap captureView = view.getDrawingCache();
 
-        MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(), captureView, "Peach Game Result", "복숭아 게임 결과 캡쳐");
+        String path = "/storage/emulated/0/DCIM/Screenshots";
+        String filename = "peachGame" + System.currentTimeMillis() + ".jpg";
+        File file = new File(path, filename);
+
+        try {
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file);
+            captureView.compress(Bitmap.CompressFormat.JPEG, 10, out);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        //String uri = MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(), captureView, "Peach Game Result", "복숭아 게임 결과 캡쳐");
+
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GalleryFragment gf = new GalleryFragment();
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("uri", path + '/' + filename);
+                    String jsonString = jsonObject.toString() + "\n";
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(context.getFilesDir() + "gallery2.json", true));
+                    bw.write(jsonString);
+                    bw.close();
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 5000);
+
         /*
         FileOutputStream fos;
 

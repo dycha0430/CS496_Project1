@@ -55,13 +55,14 @@ import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
 
-    private ArrayList<String> images;
+    public static ArrayList<String> images;
 
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
 
     Uri addImageUri;
     protected Context context;
+    protected static Context activity;
     protected ImageAdapter imageAdapter;
     Button button;
     Button cmbutton;
@@ -69,14 +70,14 @@ public class GalleryFragment extends Fragment {
     JSONObject jsonObject;
 
     //Uri -> Path(파일경로)
-    private String uri2path(Uri contentUri) {
+    public static String uri2path(Uri contentUri) {
         if (contentUri.getPath().startsWith("/storage")) {
             return contentUri.getPath();
         }
         String id = DocumentsContract.getDocumentId(contentUri).split(":")[1];
         String[] columns = { MediaStore.Files.FileColumns.DATA };
         String selection = MediaStore.Files.FileColumns._ID + " = " + id;
-        Cursor cursor = getActivity().getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
+        Cursor cursor = GalleryFragment.activity.getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
         try {
             int columnIndex = cursor.getColumnIndex(columns[0]);
             if (cursor.moveToFirst()) { return cursor.getString(columnIndex); }
@@ -117,10 +118,6 @@ public class GalleryFragment extends Fragment {
 
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d8c7e505c6ff07dc2c9126ae50a69128a935aace
     @Override
     public void onResume() {
         super.onResume();
@@ -157,6 +154,7 @@ public class GalleryFragment extends Fragment {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_gallery, container, false);
         context = container.getContext();
+        activity = getActivity();
         GridView gridView = (GridView) rootView.findViewById(R.id.gridView);
         imageAdapter = new ImageAdapter(context, images);
         gridView.setAdapter(imageAdapter);
@@ -173,6 +171,7 @@ public class GalleryFragment extends Fragment {
                             addImageView = new ImageView(context);
                             addImageView.setImageURI(addImageUri);
                             String x = uri2path(addImageUri);
+                            Log.d("****************", x);
                             if (!images.contains(x)) images.add(x);
                             else {
                                 Toast myToast = Toast.makeText(context, "The image is already in the gallery!", Toast.LENGTH_SHORT);
