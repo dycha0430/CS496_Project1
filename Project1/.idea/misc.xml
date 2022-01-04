@@ -28,10 +28,12 @@
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/phone_num_item.xml" value="0.5" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/layout/score_dialog.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/pc/Desktop/FlowCamp/CS496_Project1/Project1/app/src/main/res/menu/bottom_nav_menu.xml" value="0.190625" />
+        <entry key="app/src/main/res/drawable/background_splash.xml" value="0.4197916666666667" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.26197916666666665" />
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.26197916666666665" />
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.26197916666666665" />
         <entry key="app/src/main/res/drawable/profile_background.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/activity_contact_detail.xml" value="0.165625" />
         <entry key="app/src/main/res/layout/activity_full_image.xml" value="0.24583333333333332" />
         <entry key="app/src/main/res/layout/activity_help.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21094019790298693" />

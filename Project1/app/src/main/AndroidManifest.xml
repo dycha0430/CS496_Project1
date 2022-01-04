@@ -19,6 +19,19 @@
         <activity
             android:name=".ui.gallery.FullImageActivity"
             android:exported="false" />
+
+        <activity
+            android:name="com.example.project1.SplashActivity"
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.MAIN"/>
+                <category
+                    android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:screenOrientation="portrait"
             android:name=".MainActivity"
