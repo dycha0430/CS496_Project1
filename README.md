@@ -29,7 +29,7 @@ Wonjae Lee
 - After the game, you can share the score using contact tab.(Automatically, the score is stored in the gallery tab.)
 
 
-<img src="https://user-images.githubusercontent.com/96765048/148054549-85e1f4d8-9af2-40e0-ab3e-6be4f6f54931.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054597-54bcbd5b-4aed-4a9d-854b-3d0dbcde41d2.jpeg"  width="190" height="424"/>  <img src="https://user-images.githubusercontent.com/96765048/148054649-0a65d391-2de6-48d4-a007-f62c74ec686b.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054685-206d80ab-1ceb-49f1-a420-2c8ac6487b63.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054720-c815ccdc-fe6e-4f05-81f7-807b7589ead6.jpeg"  width="190" height="424"/>
+<img src="https://user-images.githubusercontent.com/96765048/148054549-85e1f4d8-9af2-40e0-ab3e-6be4f6f54931.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054597-54bcbd5b-4aed-4a9d-854b-3d0dbcde41d2.jpeg"  width="190" height="424"/>  <img src="https://user-images.githubusercontent.com/96765048/148054649-0a65d391-2de6-48d4-a007-f62c74ec686b.jpeg"  width="190" height="424"/>  <img src="https://user-images.githubusercontent.com/96765048/148054685-206d80ab-1ceb-49f1-a420-2c8ac6487b63.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054720-c815ccdc-fe6e-4f05-81f7-807b7589ead6.jpeg"  width="190" height="424"/>
 
 ## Development process
 ### Contact
