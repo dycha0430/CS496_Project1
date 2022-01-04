@@ -16,17 +16,20 @@ Wonjae Lee
 - You can add, delete, edit, search contacts in the contact tab.
 - You can move to a phone app or a text app with the contact information.
 
-<img src="https://user-images.githubusercontent.com/96765048/148024875-d97a73b0-86cb-4998-8468-06bdc0644dd4.jpg"  width="200" height="356"/> <img src="https://user-images.githubusercontent.com/96765048/148024975-15687e02-4aec-40d6-a1de-e17ada944d79.jpg"  width="200" height="356"/> <img src="https://user-images.githubusercontent.com/96765048/148025030-5ed62fd8-c833-4329-8f51-1210ba329850.jpg"  width="200" height="356"/> <img src="https://user-images.githubusercontent.com/96765048/148025082-44213b11-c27e-4ea9-ba44-72633505b0f1.jpg"  width="200" height="356"/>
+<img src="https://user-images.githubusercontent.com/96765048/148054259-9863ffcc-52d5-44b0-933a-232dc57f459b.jpeg"  width="200" height="444"/> <img src="https://user-images.githubusercontent.com/96765048/148054328-68c96e9b-e208-4cd2-9360-af002c2070f7.jpeg"  width="200" height="444"/> <img src="https://user-images.githubusercontent.com/96765048/148054372-06dc369c-8c27-4536-9471-a7eeb7ee9ca3.jpeg"  width="200" height="444"/> <img src="https://user-images.githubusercontent.com/96765048/148054481-6553d830-1638-4448-a257-ef38adee8e7c.jpeg"  width="200" height="444"/>
 
 ### Gallery tab 
 - You can bring up the pictures on the device.
 - You can swipe to delete the images from the gallery tab. (It won't be deleted from your phone.)
 
-<img src="https://user-images.githubusercontent.com/96765048/148025558-45a8ed33-d4ca-4901-a40b-cdff5103c177.jpg"  width="200" height="356"/> <img src="https://user-images.githubusercontent.com/96765048/148025650-d7a6a617-17eb-4f1b-88d5-d4ac320fbb0a.jpg"  width="200" height="356"/>
+
 
 ### Game tab 
 - You can play a simple game.
 - After the game, you can share the score using contact tab.(Automatically, the score is stored in the gallery tab.)
+
+
+<img src="https://user-images.githubusercontent.com/96765048/148054549-85e1f4d8-9af2-40e0-ab3e-6be4f6f54931.jpeg"  width="198" height="440"/> <img src="https://user-images.githubusercontent.com/96765048/148054597-54bcbd5b-4aed-4a9d-854b-3d0dbcde41d2.jpeg"  width=198" height="440"/>  <img src="https://user-images.githubusercontent.com/96765048/148054649-0a65d391-2de6-48d4-a007-f62c74ec686b.jpeg"  width="198" height="440"/> <img src="https://user-images.githubusercontent.com/96765048/148054685-206d80ab-1ceb-49f1-a420-2c8ac6487b63.jpeg"  width="198" height="440"/> <img src="https://user-images.githubusercontent.com/96765048/148054720-c815ccdc-fe6e-4f05-81f7-807b7589ead6.jpeg"  width="198" height="440"/>
 
 
 License
