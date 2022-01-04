@@ -49,9 +49,11 @@ public class GameFragment extends Fragment {
     TableLayout gameTable;
     ImageView readyImageView;
 
+    ViewGroup rootView;
+
 
     /* Timer */
-    private final int TOTAL_TIME = 80;
+    private final int TOTAL_TIME = 10;
     int leftTime = TOTAL_TIME;
     private Timer timer;
     private final Handler handler;
@@ -126,6 +128,7 @@ public class GameFragment extends Fragment {
                     CustomDialog customDialog = new CustomDialog(getActivity(), score, getActivity());
                     customDialog.setCancelable(false);
 
+
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     WindowManager.LayoutParams params = customDialog.getWindow().getAttributes();
                     params.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -139,7 +142,7 @@ public class GameFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_game, container, false);
 
         gameBtn = (Button) rootView.findViewById(R.id.gameBtn);
         helpBtn = (ImageButton) rootView.findViewById(R.id.helpBtn);
@@ -156,7 +159,7 @@ public class GameFragment extends Fragment {
             }
         });
 
-        init(rootView);
+        init();
 
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +218,7 @@ public class GameFragment extends Fragment {
 
         BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
         int bottom_bar_size = bnv.getHeight();
-        Log.d("game bar Height!", gameBarHeight + " " + bottom_bar_size);
+
         int other_heights = Math.round((float) density * (10)) + bottom_bar_size * 2 + gameBarHeight + status_bar_size;
         float height = size.y - other_heights;
 
@@ -228,7 +231,6 @@ public class GameFragment extends Fragment {
 //            TableLayout.LayoutParams layoutParams = (TableLayout.LayoutParams) gameTable.getLayoutParams();
             layoutParams.width = (int) ((double) height / 1.2);
             gameTable.setLayoutParams(layoutParams);
-            Log.d("hello!!", "Width : " + width + " Height : " + height + " adjust width : " + (int) ((double) height / 1.2));
         }
     }
 
@@ -293,6 +295,9 @@ public class GameFragment extends Fragment {
     }
 
     void initVars() {
+        peaches = new PeachItem[12][10];
+        getPeaches(rootView);
+
         score = 0;
         clickedPeachNum = 0;
         playing = false;
@@ -308,15 +313,14 @@ public class GameFragment extends Fragment {
         initGame();
     }
 
-    void init(ViewGroup rootView) {
+    void init() {
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 helpBtnClicked();
             }
         });
-        peaches = new PeachItem[12][10];
-        getPeaches(rootView);
+
         initVars();
         setPeachOnClickListener();
     }

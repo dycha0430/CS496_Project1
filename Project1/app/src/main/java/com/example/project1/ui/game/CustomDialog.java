@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +35,7 @@ public class CustomDialog extends Dialog {
     Activity context;
     private int score;
     private static final String CAPTURE_PATH = "CAPTURE_DIR";
+    View currentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,10 @@ public class CustomDialog extends Dialog {
         // 다이얼로그의 배경을 투명으로 만든다.
         Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        currentView = null;
+        currentView = getWindow().getDecorView();
+
+        Log.d("DDDDDDDDD@@@@",  currentView + "");
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
 
         TextView titleTextView = findViewById(R.id.titleTextView);
@@ -71,7 +77,7 @@ public class CustomDialog extends Dialog {
             public void onClick(View view) {
                 //captureActivity(context);
                 // TODO 캡쳐할 뷰를 인자로 넣어줘야 함
-                captureView(view);
+                captureView(currentView);
                 Intent intent = new Intent(thisContext, MainActivity.class);
                 thisContext.startActivity(intent);
             }

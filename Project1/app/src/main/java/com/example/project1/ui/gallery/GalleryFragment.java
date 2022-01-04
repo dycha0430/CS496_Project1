@@ -1,5 +1,7 @@
 package com.example.project1.ui.gallery;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentUris;
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -61,6 +64,7 @@ public class GalleryFragment extends Fragment {
     protected Context context;
     protected ImageAdapter imageAdapter;
     Button button;
+    Button cmbutton;
     private ImageView addImageView;
     JSONObject jsonObject;
 
@@ -113,7 +117,10 @@ public class GalleryFragment extends Fragment {
 
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8c7e505c6ff07dc2c9126ae50a69128a935aace
     @Override
     public void onResume() {
         super.onResume();
@@ -160,7 +167,7 @@ public class GalleryFragment extends Fragment {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getResultCode() == RESULT_OK) {
                             Intent data = result.getData();
                             addImageUri = data.getData();
                             addImageView = new ImageView(context);
@@ -200,6 +207,17 @@ public class GalleryFragment extends Fragment {
                 getImageActivityResultLauncher.launch(intent);
             }
         });
+
+//        cmbutton = (Button) rootView.findViewById(R.id.cameraBtn);
+//        cmbutton.setOnClickListener(new View. OnClickListener() {
+//           @Override
+//           public void onClick(View v) {
+//               Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//               startActivity(takePictureIntent);
+//
+//           }
+//        });
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
