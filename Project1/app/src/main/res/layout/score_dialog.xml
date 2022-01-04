@@ -64,7 +64,7 @@
             android:textColor="@color/white"
             android:background="@color/violet"
             android:textStyle="bold"
-            android:text="다시 하기">
+            android:text="확인">
 
        </androidx.appcompat.widget.AppCompatButton>
     </LinearLayout>
