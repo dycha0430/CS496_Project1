@@ -11,6 +11,14 @@ Wonjae Lee
 - Simple puzzle game
 
 ## Usage
+### Game tab 
+- You can play a simple game.
+- After the game, you can share the score using contact tab.(Automatically, the score is stored in the gallery tab.)
+
+![ezgif com-video-to-gif](https://user-images.githubusercontent.com/68413811/229784759-3d63df51-c91d-4ae1-a917-81002b31ec28.gif)
+
+<img src="https://user-images.githubusercontent.com/96765048/148054549-85e1f4d8-9af2-40e0-ab3e-6be4f6f54931.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054597-54bcbd5b-4aed-4a9d-854b-3d0dbcde41d2.jpeg"  width="190" height="424"/>  <img src="https://user-images.githubusercontent.com/96765048/148054649-0a65d391-2de6-48d4-a007-f62c74ec686b.jpeg"  width="190" height="424"/>  <img src="https://user-images.githubusercontent.com/96765048/148054685-206d80ab-1ceb-49f1-a420-2c8ac6487b63.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054720-c815ccdc-fe6e-4f05-81f7-807b7589ead6.jpeg"  width="190" height="424"/>
+
 ### Contact tab
 - You can get all the contacts stored on the device.
 - You can add, delete, edit, search contacts in the contact tab.
@@ -24,13 +32,6 @@ Wonjae Lee
 
 <img src="https://user-images.githubusercontent.com/96765048/148055651-2aad21fb-7e33-4727-b6c0-ab145e061ab4.jpeg"  width="200" height="444"/> <img src="https://user-images.githubusercontent.com/96765048/148055733-a6ce2991-c993-4ed0-8547-bd04ce7cd675.jpeg"  width="200" height="444"/> <img src="https://user-images.githubusercontent.com/96765048/148055765-bd5c2320-f363-4504-96a6-af3f65e5cc53.jpeg"  width="200" height="444"/> 
 
-### Game tab 
-- You can play a simple game.
-- After the game, you can share the score using contact tab.(Automatically, the score is stored in the gallery tab.)
-
-
-<img src="https://user-images.githubusercontent.com/96765048/148054549-85e1f4d8-9af2-40e0-ab3e-6be4f6f54931.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054597-54bcbd5b-4aed-4a9d-854b-3d0dbcde41d2.jpeg"  width="190" height="424"/>  <img src="https://user-images.githubusercontent.com/96765048/148054649-0a65d391-2de6-48d4-a007-f62c74ec686b.jpeg"  width="190" height="424"/>  <img src="https://user-images.githubusercontent.com/96765048/148054685-206d80ab-1ceb-49f1-a420-2c8ac6487b63.jpeg"  width="190" height="424"/> <img src="https://user-images.githubusercontent.com/96765048/148054720-c815ccdc-fe6e-4f05-81f7-807b7589ead6.jpeg"  width="190" height="424"/>
-
 ## Development process
 ### Contact
 - Used recyclerview
@@ -43,23 +44,3 @@ Wonjae Lee
 - Used viewpager
 ### Game
 - Used tableview
-
-
-
-
-License
---------
-
-    Copyright 2018 Chris Banes
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
