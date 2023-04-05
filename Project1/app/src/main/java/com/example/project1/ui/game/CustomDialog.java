@@ -114,10 +114,6 @@ public class CustomDialog extends Dialog {
             e.printStackTrace();
         }
 
-        //context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        //String uri = MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(), captureView, "Peach Game Result", "복숭아 게임 결과 캡쳐");
-
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -135,26 +131,6 @@ public class CustomDialog extends Dialog {
                 }
             }
         }, 5000);
-
-        /*
-        FileOutputStream fos;
-
-        String strFolderPath = Environment.getExternalStorageDirectory().getAbsolutePath() + CAPTURE_PATH;
-        File folder = new File(strFolderPath);
-        if(!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        String strFilePath = strFolderPath + "/" + System.currentTimeMillis() + ".png";
-        File fileCacheItem = new File(strFilePath);
-
-        try {
-            fos = new FileOutputStream(fileCacheItem);
-            captureView.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-         */
     }
 
     public static void captureActivity(Activity context) {
@@ -173,34 +149,6 @@ public class CustomDialog extends Dialog {
         Bitmap bmp = Bitmap.createBitmap(screenshot, location[0], location[1], root.getWidth(), root.getHeight(), null, false);
 
         MediaStore.Images.Media.insertImage(context.getContentResolver(), bmp, "Peach Game Result", "복숭아 게임 결과 캡쳐");
-        /*
-        String strFolderPath = Environment.getExternalStorageDirectory().getAbsolutePath() + CAPTURE_PATH;
-        File folder = new File(strFolderPath);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        String strFilePath = strFolderPath + "/" + System.currentTimeMillis() + ".png";
-        File fileCacheItem = new File(strFilePath);
-        OutputStream out = null;
-
-        try {
-            fileCacheItem.createNewFile();
-            out = new FileOutputStream(fileCacheItem);
-            bmp.compress(Bitmap.CompressFormat.PNG, 50, out);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        */
-
     }
 
     public CustomDialog(Context mContext, int score, Activity context) {
